@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { useProcessStore } from '@/store';
 import { format } from "date-fns";
+import { AddModal } from './AddModal';
 
 export const SearchBar = ({type}: {type: string}) => {
   const { filters, setFilters } = useProcessStore();
@@ -66,7 +67,7 @@ export const SearchBar = ({type}: {type: string}) => {
               />
             </DialogContent>
           </Dialog>
-          <Button>Add {type}</Button>
+          <AddModal type={type} />
         </div>
       </div>
     </div>
