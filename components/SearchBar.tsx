@@ -30,7 +30,7 @@ export const SearchBar = ({type}: {type: string}) => {
         <div className="relative flex-1 max-w-lg">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search processes..."
+            placeholder="Search ..."
             className="pl-10"
             value={filters.search}
             onChange={(e) => setFilters({ search: e.target.value })}

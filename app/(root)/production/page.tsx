@@ -180,7 +180,7 @@ export default function Production() {
     <div className="min-h-screen bg-gray-50">
       <TopNavbar />
       <SearchBar type="Production" />
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {processes.map((process) => (
             <ProductionCard key={process.id} process={process} />

@@ -11,6 +11,36 @@ export interface BioMassDetails {
   weight: string;
 }
 
+export interface MixData {
+  id: number;
+  date: string;
+  time: string;
+  imageSrc: string;
+  category: string;
+  type: string;
+  volume: string;
+  openBiochar: string;
+  totalUnpackedMix: string;
+  availableUnpackedMix: string;
+  packagingDetails: string;
+  otherMixQty: string;
+  viewLink: string;
+}
+
+export interface DistributionRecord {
+  id: number;
+  date: string;
+  time: string;
+  imageSrc: string;
+  farmerName: string;
+  distributionType: string;
+  distributionQty: string;
+  buyerName: string;
+  vehicle: string;
+}
+
+
+
 export interface FPUData {
   fpuName: string;
   biomassDetails: BioMassDetails;
