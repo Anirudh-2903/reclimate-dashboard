@@ -1,7 +1,7 @@
 // src/components/layout/TopNavbar.tsx
 import React from 'react';
 import Link from "next/link";
-import { Bell, Sun, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -10,7 +10,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
+
 
 const navItems = [
     'Collection',
@@ -25,7 +26,10 @@ export const TopNavbar = () => {
             <div className="container flex h-16 items-center">
                 <div className="mr-4 hidden md:flex">
 
-                    <Link href="/" className="mr-6 flex items-center text-xl font-black space-x-2">Reclimate</Link>
+                    <Link href="/" className="mr-6 flex items-center text-xl font-semibold space-x-2">
+                        <Image alt="logo" src="/logo_green.png" width={36} height={36} />
+                        Reclimate
+                    </Link>
 
                     <nav className="flex items-center space-x-6 text-sm font-medium">
                         {navItems.map((item) => (
@@ -47,14 +51,6 @@ export const TopNavbar = () => {
 
                 <div className="flex flex-1 items-center justify-end space-x-4">
                     <nav className="flex items-center space-x-2">
-                        <Button variant="ghost" size="icon">
-                            <Sun className="h-5 w-5" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="relative">
-                            <Bell className="h-5 w-5" />
-                            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-600" />
-                        </Button>
-                        <Separator orientation="vertical" className="h-6" />
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
