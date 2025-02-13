@@ -1,4 +1,6 @@
 // src/components/layout/TopNavbar.tsx
+"use client";
+
 import React from 'react';
 import Link from "next/link";
 import { Menu } from 'lucide-react';
@@ -11,6 +13,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import { useRouter } from 'next/navigation';
 
 
 const navItems = [
@@ -21,6 +24,15 @@ const navItems = [
 ]
 
 export const TopNavbar = () => {
+
+    const router = useRouter();
+
+    const handleLogout = () => {
+        // Clear authentication data
+        localStorage.removeItem("authToken");
+        // Redirect to Sign-In page
+        router.push("/sign-in");
+      };
     return (
         <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 items-center">
@@ -60,9 +72,9 @@ export const TopNavbar = () => {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem>Profile</DropdownMenuItem>
-                                <DropdownMenuItem>Settings</DropdownMenuItem>
-                                <DropdownMenuItem>Logout</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => router.push("/profile")}>Profile</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => router.push("/settings")}>Settings</DropdownMenuItem>
+                                <DropdownMenuItem onClick={handleLogout} className="text-red-500">Logout</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </nav>
