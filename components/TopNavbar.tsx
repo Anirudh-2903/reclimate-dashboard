@@ -26,8 +26,13 @@ const navItems = [
 export const TopNavbar = () => {
 
     const router = useRouter();
-    const firstName = localStorage.getItem("firstName");
-    const lastName = localStorage.getItem("lastName");
+    let firstName, lastName;
+
+    if (typeof window !== 'undefined') {
+        firstName = localStorage.getItem("firstName");
+        lastName = localStorage.getItem("lastName");
+    }
+
 
     const handleLogout = () => {
         // Clear authentication data
