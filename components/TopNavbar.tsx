@@ -26,6 +26,8 @@ const navItems = [
 export const TopNavbar = () => {
 
     const router = useRouter();
+    const firstName = localStorage.getItem("firstName");
+    const lastName = localStorage.getItem("lastName");
 
     const handleLogout = () => {
         // Clear authentication data
@@ -67,7 +69,7 @@ export const TopNavbar = () => {
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                                     <Avatar className="h-8 w-8">
-                                        <AvatarFallback>AD</AvatarFallback>
+                                        <AvatarFallback>{`${firstName?.charAt(0)}${lastName?.charAt(0)}`}</AvatarFallback>
                                     </Avatar>
                                 </Button>
                             </DropdownMenuTrigger>

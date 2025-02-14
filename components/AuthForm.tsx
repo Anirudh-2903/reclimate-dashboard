@@ -27,7 +27,7 @@ const AuthForm = ({ type }: { type: string }) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
-        
+
         if (type === 'sign-up') {
             if (password !== confirmPassword) {
                 setError('Passwords do not match');
@@ -39,6 +39,8 @@ const AuthForm = ({ type }: { type: string }) => {
             localStorage.setItem('userEmail', email);
             localStorage.setItem('userPassword', password);
             localStorage.setItem('authToken', 'dummy-token');
+            localStorage.setItem('firstName', firstName);
+            localStorage.setItem('lastName', lastName);
             router.push('/'); // Redirect after successful login
         }
 

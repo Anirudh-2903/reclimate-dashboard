@@ -12,7 +12,7 @@ export default function Distribution() {
     [
       {
         "id": 1,
-        "date": "20/03/2024",
+        "date": "2025-02-11",
         "time": "10:15 AM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "Aisha Ibrahim",
@@ -23,7 +23,7 @@ export default function Distribution() {
       },
       {
         "id": 2,
-        "date": "21/03/2024",
+        "date": "2025-02-12",
         "time": "11:45 AM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "John Doe",
@@ -34,7 +34,7 @@ export default function Distribution() {
       },
       {
         "id": 3,
-        "date": "22/03/2024",
+        "date": "2025-02-13",
         "time": "02:00 PM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "Emily Davis",
@@ -45,7 +45,7 @@ export default function Distribution() {
       },
       {
         "id": 4,
-        "date": "23/03/2024",
+        "date": "2025-02-14",
         "time": "04:30 PM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "Michael Johnson",
@@ -56,7 +56,7 @@ export default function Distribution() {
       },
       {
         "id": 5,
-        "date": "24/03/2024",
+        "date": "2025-02-15",
         "time": "08:00 AM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "Sophie Williams",
@@ -67,7 +67,7 @@ export default function Distribution() {
       },
       {
         "id": 6,
-        "date": "25/03/2024",
+        "date": "2025-02-16",
         "time": "06:15 AM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "Liam Martinez",
@@ -78,7 +78,7 @@ export default function Distribution() {
       },
       {
         "id": 7,
-        "date": "26/03/2024",
+        "date": "2025-02-17",
         "time": "01:00 PM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "Zara Patel",
@@ -89,7 +89,7 @@ export default function Distribution() {
       },
       {
         "id": 8,
-        "date": "27/03/2024",
+        "date": "2025-02-18",
         "time": "09:30 AM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "Ravi Kumar",
@@ -100,7 +100,7 @@ export default function Distribution() {
       },
       {
         "id": 9,
-        "date": "28/03/2024",
+        "date": "2025-02-19",
         "time": "03:00 PM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "Maya Singh",
@@ -111,7 +111,7 @@ export default function Distribution() {
       },
       {
         "id": 10,
-        "date": "29/03/2024",
+        "date": "2025-02-20",
         "time": "11:00 AM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "Samir Ahmed",
@@ -122,7 +122,7 @@ export default function Distribution() {
       },
       {
         "id": 11,
-        "date": "30/03/2024",
+        "date": "2025-02-21",
         "time": "10:45 AM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "Fatima Ali",
@@ -133,7 +133,7 @@ export default function Distribution() {
       },
       {
         "id": 12,
-        "date": "31/03/2024",
+        "date": "2025-02-22",
         "time": "02:30 PM",
         "imageSrc": "/placeholder.svg",
         "farmerName": "Raghav Mehta",
@@ -142,15 +142,19 @@ export default function Distribution() {
         "buyerName": "William Harris",
         "vehicle": "Ford Explorer"
       }
-    ]);
+  ]
+
+  );
+
+  const [filteredData, setFilteredData] = useState(distributions);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <TopNavbar />
-      <SearchBar type="Distribution" />
+      <SearchBar type="Distribution" data={distributions} onFilter={setFilteredData}  />
       <div className="max-w-7xl mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {distributions.map((distributionData) => (
+          {filteredData.map((distributionData) => (
             <DistributionCard key={distributionData.id} distributionData={distributionData} />
           ))}
         </div>

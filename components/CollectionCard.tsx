@@ -8,6 +8,21 @@ interface CollectionCardProps {
   fpuData: FPUData;
 }
 
+function formatDate(dateString: string) {
+  const date = new Date(dateString);  // Parse the date string
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  };
+
+
+  // Convert the date to a long-form date without the weekday
+  const longFormDate = date.toLocaleDateString('en-US', options);
+
+  return longFormDate;
+}
+
 export const CollectionCard: React.FC<CollectionCardProps> = ({ fpuData }) => {
 
   return (
@@ -34,7 +49,7 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({ fpuData }) => {
       {/* Biomass Details Section */}
       <div className="flex justify-between mb-3">
         <p className="font-semibold">Biomass Details</p>
-        <p className="text-slate-500">{fpuData.date}</p>
+        <p className="text-slate-500">{formatDate(fpuData.date)}</p>
       </div>
 
       {/* Biomass Details and Vehicle Section */}

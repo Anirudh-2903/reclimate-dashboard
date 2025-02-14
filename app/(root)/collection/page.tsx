@@ -10,105 +10,107 @@ const Collection  = () => {
 
   const [FPUData] = useState<FPUData[]>(
     [
-    {
-      "fpuName": 'GreenHarvest Solutions',
-      "biomassDetails": {
-        "source": 'Rice stalk',
-        "weight": '1800 kg',
+      {
+        "fpuName": "GreenHarvest Solutions",
+        "biomassDetails": {
+          "source": "Rice stalk",
+          "weight": "1800 kg"
+        },
+        "date": "2025-02-05",
+        "vehicleType": "Nissan Frontier"
       },
-      "date": '2024-03-15',
-      "vehicleType": 'Nissan Frontier',
-    },
-    {
-      "fpuName": 'EcoEnergy Farms',
-      "biomassDetails": {
-        "source": 'Palm fronds',
-        "weight": '2000 kg',
+      {
+        "fpuName": "EcoEnergy Farms",
+        "biomassDetails": {
+          "source": "Palm fronds",
+          "weight": "2000 kg"
+        },
+        "date": "2025-02-08",
+        "vehicleType": "Isuzu D-Max"
       },
-      "date": '2024-03-16',
-      "vehicleType": 'Isuzu D-Max',
-    },
-    {
-      "fpuName": 'CleanCrop Technologies',
-      "biomassDetails": {
-        "source": 'Sugarcane leaves',
-        "weight": '1500 kg',
+      {
+        "fpuName": "CleanCrop Technologies",
+        "biomassDetails": {
+          "source": "Sugarcane leaves",
+          "weight": "1500 kg"
+        },
+        "date": "2025-02-11",
+        "vehicleType": "Toyota Hilux"
       },
-      "date": '2024-03-17',
-      "vehicleType": 'Toyota Hilux',
-    },
-    {
-      "fpuName": 'BioCycle Innovations',
-      "biomassDetails": {
-        "source": 'Coconut husk',
-        "weight": '2200 kg',
+      {
+        "fpuName": "BioCycle Innovations",
+        "biomassDetails": {
+          "source": "Coconut husk",
+          "weight": "2200 kg"
+        },
+        "date": "2025-02-13",
+        "vehicleType": "Mitsubishi Triton"
       },
-      "date": '2024-03-18',
-      "vehicleType": 'Mitsubishi Triton',
-    },
-    {
-      "fpuName": 'SustainableAgro Solutions',
-      "biomassDetails": {
-        "source": 'Rubber tree bark',
-        "weight": '1700 kg',
+      {
+        "fpuName": "SustainableAgro Solutions",
+        "biomassDetails": {
+          "source": "Rubber tree bark",
+          "weight": "1700 kg"
+        },
+        "date": "2025-02-15",
+        "vehicleType": "Ford Ranger"
       },
-      "date": '2024-03-19',
-      "vehicleType": 'Ford Ranger',
-    },
-    {
-      "fpuName": 'RegenEarth Tech',
-      "biomassDetails": {
-        "source": 'Corn stalks',
-        "weight": '2100 kg',
+      {
+        "fpuName": "RegenEarth Tech",
+        "biomassDetails": {
+          "source": "Corn stalks",
+          "weight": "2100 kg"
+        },
+        "date": "2025-02-17",
+        "vehicleType": "Chevrolet Silverado"
       },
-      "date": '2024-03-20',
-      "vehicleType": 'Chevrolet Silverado',
-    },
-    {
-      "fpuName": 'EcoCycle Systems',
-      "biomassDetails": {
-        "source": 'Wheat straw',
-        "weight": '1600 kg',
+      {
+        "fpuName": "EcoCycle Systems",
+        "biomassDetails": {
+          "source": "Wheat straw",
+          "weight": "1600 kg"
+        },
+        "date": "2025-02-19",
+        "vehicleType": "Honda Ridgeline"
       },
-      "date": '2024-03-21',
-      "vehicleType": 'Honda Ridgeline',
-    },
-    {
-      "fpuName": 'CarbonFarm Innovations',
-      "biomassDetails": {
-        "source": 'Algae biomass',
-        "weight": '1300 kg',
+      {
+        "fpuName": "CarbonFarm Innovations",
+        "biomassDetails": {
+          "source": "Algae biomass",
+          "weight": "1300 kg"
+        },
+        "date": "2025-02-21",
+        "vehicleType": "Toyota Tacoma"
       },
-      "date": '2024-03-22',
-      "vehicleType": 'Toyota Tacoma',
-    },
-    {
-      "fpuName": 'CleanGreen Solutions',
-      "biomassDetails": {
-        "source": 'Mulberry leaves',
-        "weight": '1900 kg',
+      {
+        "fpuName": "CleanGreen Solutions",
+        "biomassDetails": {
+          "source": "Mulberry leaves",
+          "weight": "1900 kg"
+        },
+        "date": "2025-02-24",
+        "vehicleType": "Ram 1500"
       },
-      "date": '2024-03-23',
-      "vehicleType": 'Ram 1500',
-    },
-    {
-      "fpuName": 'AgriRenew Technologies',
-      "biomassDetails": {
-        "source": 'Cotton stalks',
-        "weight": '1750 kg',
-      },
-      "date": '2024-03-24',
-      "vehicleType": 'GMC Canyon',
-    },
-  ]);
+      {
+        "fpuName": "AgriRenew Technologies",
+        "biomassDetails": {
+          "source": "Cotton stalks",
+          "weight": "1750 kg"
+        },
+        "date": "2025-02-27",
+        "vehicleType": "GMC Canyon"
+      }
+  ]
+  );
 
+  const [filteredData, setFilteredData] = useState(FPUData);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <TopNavbar />
-      <SearchBar type="Collection" />
+      <SearchBar type="Collection" data={FPUData} onFilter={setFilteredData} />
     <div className="grid grid-cols-3  w-full gap-6 p-6">
-            {FPUData.map((item, index) => (
+            {filteredData.map((item, index) => (
               <CollectionCard fpuData={item} key={index}/>
             ))}
       </div>

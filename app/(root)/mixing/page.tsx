@@ -12,7 +12,7 @@ export default function Mixing() {
     [
       {
         "id": 1,
-        "date": "12/02/2024",
+        "date": "2025-02-12",
         "time": "09:02 AM",
         "imageSrc": "/placeholder.svg",
         "category": "Mix",
@@ -27,7 +27,7 @@ export default function Mixing() {
       },
       {
         "id": 2,
-        "date": "13/02/2024",
+        "date": "2025-02-13",
         "time": "10:30 AM",
         "imageSrc": "/placeholder.svg",
         "category": "Premium",
@@ -42,7 +42,7 @@ export default function Mixing() {
       },
       {
         "id": 3,
-        "date": "14/02/2024",
+        "date": "2025-02-14",
         "time": "02:15 PM",
         "imageSrc": "/placeholder.svg",
         "category": "Standard",
@@ -57,7 +57,7 @@ export default function Mixing() {
       },
       {
         "id": 4,
-        "date": "15/02/2024",
+        "date": "2025-02-15",
         "time": "11:45 AM",
         "imageSrc": "/placeholder.svg",
         "category": "Mix",
@@ -72,7 +72,7 @@ export default function Mixing() {
       },
       {
         "id": 5,
-        "date": "16/02/2024",
+        "date": "2025-02-16",
         "time": "03:20 PM",
         "imageSrc": "/placeholder.svg",
         "category": "Industrial",
@@ -87,7 +87,7 @@ export default function Mixing() {
       },
       {
         "id": 6,
-        "date": "17/02/2024",
+        "date": "2025-02-17",
         "time": "07:50 AM",
         "imageSrc": "/placeholder.svg",
         "category": "Premium",
@@ -102,7 +102,7 @@ export default function Mixing() {
       },
       {
         "id": 7,
-        "date": "18/02/2024",
+        "date": "2025-02-18",
         "time": "06:30 PM",
         "imageSrc": "/placeholder.svg",
         "category": "Standard",
@@ -117,7 +117,7 @@ export default function Mixing() {
       },
       {
         "id": 8,
-        "date": "19/02/2024",
+        "date": "2025-02-19",
         "time": "12:05 PM",
         "imageSrc": "/placeholder.svg",
         "category": "Agricultural",
@@ -132,7 +132,7 @@ export default function Mixing() {
       },
       {
         "id": 9,
-        "date": "20/02/2024",
+        "date": "2025-02-20",
         "time": "08:00 AM",
         "imageSrc": "/placeholder.svg",
         "category": "Mix",
@@ -147,7 +147,7 @@ export default function Mixing() {
       },
       {
         "id": 10,
-        "date": "21/02/2024",
+        "date": "2025-02-21",
         "time": "09:30 AM",
         "imageSrc": "/placeholder.svg",
         "category": "Premium",
@@ -162,7 +162,7 @@ export default function Mixing() {
       },
       {
         "id": 11,
-        "date": "22/02/2024",
+        "date": "2025-02-22",
         "time": "10:15 AM",
         "imageSrc": "/placeholder.svg",
         "category": "Standard",
@@ -177,7 +177,7 @@ export default function Mixing() {
       },
       {
         "id": 12,
-        "date": "23/02/2024",
+        "date": "2025-02-23",
         "time": "11:40 AM",
         "imageSrc": "/placeholder.svg",
         "category": "Mix",
@@ -192,7 +192,7 @@ export default function Mixing() {
       },
       {
         "id": 13,
-        "date": "24/02/2024",
+        "date": "2025-02-24",
         "time": "01:25 PM",
         "imageSrc": "/placeholder.svg",
         "category": "Industrial",
@@ -207,7 +207,7 @@ export default function Mixing() {
       },
       {
         "id": 14,
-        "date": "25/02/2024",
+        "date": "2025-02-25",
         "time": "05:00 PM",
         "imageSrc": "/placeholder.svg",
         "category": "Premium",
@@ -220,15 +220,20 @@ export default function Mixing() {
         "otherMixQty": "60.00 kg",
         "viewLink": "#"
       }
-    ]);
+    ]
+
+    );
+
+  const [filteredData, setFilteredData] = useState(mixings);
+
 
   return (
     <div className="min-h-screen bg-gray-50">
       <TopNavbar />
-      <SearchBar type="Mixing" />
+      <SearchBar type="Mixing" data={mixings} onFilter={setFilteredData} />
       <div className="max-w-7xl mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {mixings.map((mixData) => (
+            {filteredData.map((mixData) => (
               <MixingCard key={mixData.id} mixData={mixData} />
             ))}
         </div>

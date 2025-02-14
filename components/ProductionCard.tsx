@@ -17,6 +17,20 @@ interface ProcessCardProps {
   process: ProcessItem;
 }
 
+function formatDate(dateString: string) {
+  const date = new Date(dateString);  // Parse the date string
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  };
+
+  // Convert the date to a long-form date without the weekday
+  const longFormDate = date.toLocaleDateString('en-US', options);
+
+  return longFormDate;
+}
+
 export const ProductionCard: React.FC<ProcessCardProps> = ({ process }) => {
   const getStatusBadgeVariant = (status: string): "default" | "secondary" | "destructive" | "outline" => {
     switch (status) {
@@ -41,7 +55,7 @@ export const ProductionCard: React.FC<ProcessCardProps> = ({ process }) => {
           </Badge>
         </div>
         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-          <span>{process.date}</span>
+          <span>{formatDate(process.date)}</span>
         </div>
         <br />
           <CardDescription className="text-md text-black font-bold">{process.timeStatus}</CardDescription>

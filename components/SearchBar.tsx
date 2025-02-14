@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from 'react';
-import { Search, Calendar } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Search, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
@@ -9,21 +11,60 @@ import {
   Dialog,
   DialogContent,
   DialogTrigger,
-  DialogTitle
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { useProcessStore } from '@/store';
 import { format } from "date-fns";
-import { AddModal } from './AddModal';
+import { AddModal } from "./AddModal";
+import { DateRange } from "react-day-picker";
 
-export const SearchBar = ({type}: {type: string}) => {
-  const { filters, setFilters } = useProcessStore();
-  const [hasSelected, setHasSelected] = useState(false); // Track if user has selected a date
+interface SearchBarProps {
+  type: string;
+  data: any[]; // The dataset coming from the parent page
+  onFilter: (filteredData: any[]) => void; // Callback to return filtered data
+}
+
+export const SearchBar = ({ type, data, onFilter }: SearchBarProps) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [dateRange, setDateRange] = React.useState<DateRange>({
+    from: new Date(2025,1,1),
+    to: new Date(2025,2,1)
+  })
+  // Track if user has selected a date
 
   // Compute the button label
   const formattedDateRange =
-    hasSelected && filters.dateRange.startDate && filters.dateRange.endDate
-      ? `${format(filters.dateRange.startDate, "MMM dd, yyyy")} - ${format(filters.dateRange.endDate, "MMM dd, yyyy")}`
-      : "Select Date Range";
+  dateRange.from
+    ? dateRange.to
+      ? `${format(dateRange.from, "MMM dd, yyyy")} - ${format(dateRange.to, "MMM dd, yyyy")}`
+      : `${format(dateRange.from, "MMM dd, yyyy")}` // Show only `from` if `to` is missing
+    : "Select Date Range";
+
+
+  useEffect(() => {
+    // Perform filtering
+    const filteredData = data.filter((item) => {
+      const matchesSearch =
+        !searchTerm ||
+        item.fpuName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.vehicleType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.biomassDetails.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.biomassDetails.weight.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.date.includes(searchTerm);
+
+        const matchesDate =
+        !dateRange.from ||
+        !dateRange.to ||
+        (new Date(item.date) >= dateRange.from &&
+          new Date(item.date) <= dateRange.to);
+
+
+
+
+      return matchesSearch && matchesDate;
+    });
+
+    onFilter(filteredData);
+  }, [searchTerm, dateRange, data, onFilter]);
 
   return (
     <div className="container py-4">
@@ -33,8 +74,8 @@ export const SearchBar = ({type}: {type: string}) => {
           <Input
             placeholder="Search ..."
             className="pl-10"
-            value={filters.search}
-            onChange={(e) => setFilters({ search: e.target.value })}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="flex items-center gap-4">
@@ -46,23 +87,16 @@ export const SearchBar = ({type}: {type: string}) => {
               </Button>
             </DialogTrigger>
             <DialogContent className="w-full max-w-sm">
-            <DialogTitle>Select Date Range</DialogTitle>
+              <DialogTitle>Select Date Range</DialogTitle>
               <CalendarComponent
                 mode="range"
-                selected={{
-                  from: filters.dateRange.startDate,
-                  to: filters.dateRange.endDate,
-                }}
+                selected={dateRange}
                 onSelect={(range) => {
-                  if (range?.from && range?.to) {
-                    setFilters({
-                      dateRange: {
-                        startDate: range.from,
-                        endDate: range.to,
-                      },
-                    });
-                    setHasSelected(true); // Set flag when a date is chosen
-                  }
+                  if (!range) return; // Ensure range is valid
+                  setDateRange((prev) => ({
+                    from: range.from,
+                    to: range.to || range.from, // Fix: Prevent `undefined` issue
+                  }));
                 }}
               />
             </DialogContent>

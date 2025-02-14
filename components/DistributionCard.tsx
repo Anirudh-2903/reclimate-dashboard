@@ -5,6 +5,19 @@ import Image from "next/image";
 interface DistributionCardProps {
     distributionData: DistributionRecord;
 }
+function formatDate(dateString: string) {
+  const date = new Date(dateString);  // Parse the date string
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  };
+
+  // Convert the date to a long-form date without the weekday
+  const longFormDate = date.toLocaleDateString('en-US', options);
+
+  return longFormDate;
+}
 
 export const DistributionCard: React.FC<DistributionCardProps> = ({distributionData}) => {
   return (
@@ -13,7 +26,7 @@ export const DistributionCard: React.FC<DistributionCardProps> = ({distributionD
         <div className="space-y-4 text-sm">
           <div className="flex justify-between">
             <div className="flex items-center space-x-2 bg-slate-200 my-4 px-4 text-center rounded-full font-semibold text-muted-foreground">
-              <div>{distributionData.date}</div>
+              <div>{formatDate(distributionData.date)}</div>
               <div>{distributionData.time}</div>
             </div>
             <Image
