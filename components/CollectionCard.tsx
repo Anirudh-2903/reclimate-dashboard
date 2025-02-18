@@ -1,4 +1,4 @@
-// src/components/fpuData/ProcessCard.tsx
+"use client";
 
 import { FPUData } from '@/types';
 import Image from 'next/image';
@@ -9,54 +9,44 @@ interface CollectionCardProps {
 }
 
 function formatDate(dateString: string) {
-  const date = new Date(dateString);  // Parse the date string
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  };
-
-
-  // Convert the date to a long-form date without the weekday
-  const longFormDate = date.toLocaleDateString('en-US', options);
-
-  return longFormDate;
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
 }
 
 export const CollectionCard: React.FC<CollectionCardProps> = ({ fpuData }) => {
-
   return (
-    <div className="rounded-lg border overflow-hidden flex flex-col bg-card text-card-foreground shadow-lg hover:shadow-xl transition-shadow duration-300">
-    <div className="flex-grow p-4 text-sm">
-      {/* FPU Name Section */}
-      <div className="flex justify-between items-start mb-3">
+    <div className="rounded-lg border overflow-hidden bg-card text-card-foreground shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col justify-between p-4">
+
+      {/* Top Section: FPU Name & Image */}
+      <div className="flex justify-between items-start">
         <div>
-          <h2 className="font-semibold">FPU Name</h2>
-          <p>{fpuData.fpuName}</p>
+          <h2 className="font-semibold text-base sm:text-lg">FPU Name</h2>
+          <p className="text-sm sm:text-base">{fpuData.fpuName}</p>
         </div>
         <Image
           alt="FPU Image"
           loading="lazy"
-          width="48"
-          height="48"
-          decoding="async"
-          className="rounded-md"
+          width={48}
+          height={48}
+          className="rounded-md w-12 h-12 sm:w-16 sm:h-16"
           src="/placeholder.svg"
-          style={{ color: "transparent" }}
         />
       </div>
 
       {/* Biomass Details Section */}
-      <div className="flex justify-between mb-3">
+      <div className="flex justify-between text-sm sm:text-base mt-3">
         <p className="font-semibold">Biomass Details</p>
         <p className="text-slate-500">{formatDate(fpuData.date)}</p>
       </div>
 
-      {/* Biomass Details and Vehicle Section */}
-      <div className="flex items-center justify-between">
-        <p className='font-medium'>{fpuData.biomassDetails.source}</p>
-        <p className="mr-2">Weight: {fpuData.biomassDetails.weight}</p>
-        <div className="flex items-center bg-slate-100 px-2 py-1 rounded">
+      {/* Bottom Section: Biomass Source, Weight & Vehicle (pushed to bottom) */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mt-auto">
+        <p className="font-medium">{fpuData.biomassDetails.source}</p>
+        <p className="text-sm sm:text-base">Weight: {fpuData.biomassDetails.weight}</p>
+
+        {/* Vehicle Icon (Aligned Bottom Right on Mobile) */}
+        <div className="flex items-center bg-slate-100 px-2 py-1 rounded w-fit ml-auto sm:ml-0">
           <svg
             className="w-4 h-4 text-muted-foreground"
             xmlns="http://www.w3.org/2000/svg"
@@ -75,12 +65,13 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({ fpuData }) => {
             <circle cx="17" cy="18" r="2"></circle>
             <circle cx="7" cy="18" r="2"></circle>
           </svg>
-          <span className="ml-1 text-xs text-muted-foreground">
-          {fpuData.vehicleType}
+          <span className="ml-1 text-xs sm:text-sm text-muted-foreground">
+            {fpuData.vehicleType}
           </span>
         </div>
       </div>
+
     </div>
-  </div>
   );
 };
+

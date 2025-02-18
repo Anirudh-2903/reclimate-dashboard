@@ -26,51 +26,106 @@ interface SearchBarProps {
 export const SearchBar = ({ type, data, onFilter }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [dateRange, setDateRange] = React.useState<DateRange>({
-    from: new Date(2025,1,1),
-    to: new Date(2025,2,1)
+    from: new Date(2025, 1, 1),
+    to: new Date(2025, 2, 1)
   })
   // Track if user has selected a date
 
   // Compute the button label
   const formattedDateRange =
-  dateRange.from
-    ? dateRange.to
-      ? `${format(dateRange.from, "MMM dd, yyyy")} - ${format(dateRange.to, "MMM dd, yyyy")}`
-      : `${format(dateRange.from, "MMM dd, yyyy")}` // Show only `from` if `to` is missing
-    : "Select Date Range";
+    dateRange.from
+      ? dateRange.to
+        ? `${format(dateRange.from, "MMM dd, yyyy")} - ${format(dateRange.to, "MMM dd, yyyy")}`
+        : `${format(dateRange.from, "MMM dd, yyyy")}` // Show only `from` if `to` is missing
+      : "Select Date Range";
 
 
   useEffect(() => {
     // Perform filtering
     const filteredData = data.filter((item) => {
-      const matchesSearch =
-        !searchTerm ||
-        item.fpuName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.vehicleType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.biomassDetails.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.biomassDetails.weight.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.date.includes(searchTerm);
+      if (type == "Collection") {
+        const numericSearch = parseFloat(searchTerm);
+        const matchesSearch =
+          !searchTerm ||
+          item.fpuName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.vehicleType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.biomassDetails.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (!isNaN(numericSearch) && item.biomassDetails.weight >= numericSearch) ||
+          item.date.includes(searchTerm);
 
         const matchesDate =
-        !dateRange.from ||
-        !dateRange.to ||
-        (new Date(item.date) >= dateRange.from &&
-          new Date(item.date) <= dateRange.to);
+          !dateRange.from ||
+          !dateRange.to ||
+          (new Date(item.date) >= dateRange.from && new Date(item.date) <= dateRange.to);
 
+        return matchesSearch && matchesDate;
+      }
 
+      if (type == "Production") {
+        const numericSearch = parseFloat(searchTerm);
+        const matchesSearch =
+          !searchTerm ||
+          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (!isNaN(numericSearch) && parseFloat(item.biomassQty) >= numericSearch) ||
+          (!isNaN(numericSearch) && parseFloat(item.biocharQty) >= numericSearch) ||
+          item.date.includes(searchTerm);
 
+        const matchesDate =
+          !dateRange.from ||
+          !dateRange.to ||
+          (new Date(item.date) >= dateRange.from && new Date(item.date) <= dateRange.to);
 
-      return matchesSearch && matchesDate;
+        return matchesSearch && matchesDate;
+      }
+
+      if (type == "Mixing") {
+        const numericSearch = parseFloat(searchTerm);
+        const matchesSearch =
+          !searchTerm ||
+          item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (!isNaN(numericSearch) && parseFloat(item.totalUnpackedMix) >= numericSearch) ||
+          (!isNaN(numericSearch) && parseFloat(item.availableUnpackedMix) >= numericSearch) ||
+          (!isNaN(numericSearch) && parseFloat(item.otherMixQty) >= numericSearch) ||
+          item.date.includes(searchTerm);
+
+        const matchesDate =
+          !dateRange.from ||
+          !dateRange.to ||
+          (new Date(item.date) >= dateRange.from && new Date(item.date) <= dateRange.to);
+
+        return matchesSearch && matchesDate;
+      }
+
+      if (type == "Distribution") {
+        const numericSearch = parseFloat(searchTerm);
+        const matchesSearch =
+          !searchTerm ||
+          item.farmerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.distributionType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (!isNaN(numericSearch) && parseFloat(item.distributionQty) >= numericSearch) ||
+          item.buyerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.vehicle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.date.includes(searchTerm);
+
+        const matchesDate =
+          !dateRange.from ||
+          !dateRange.to ||
+          (new Date(item.date) >= dateRange.from && new Date(item.date) <= dateRange.to);
+
+        return matchesSearch && matchesDate;
+      }
     });
 
     onFilter(filteredData);
-  }, [searchTerm, dateRange, data, onFilter]);
+  }, [searchTerm, dateRange, data, onFilter,type]);
 
   return (
     <div className="container py-4">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="relative flex-1 max-w-lg">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" type={type} />
           <Input
             placeholder="Search ..."
             className="pl-10"

@@ -46,65 +46,76 @@ export const ProductionCard: React.FC<ProcessCardProps> = ({ process }) => {
   };
 
   return (
-    <Card>
+    <Card className="w-full max-w-md mx-auto sm:max-w-lg lg:max-w-xl">
       <CardHeader className="space-y-1">
-        <div className="flex items-start justify-between">
-          <CardTitle className="text-xl">{process.name}</CardTitle>
-          <Badge variant={getStatusBadgeVariant(process.status)}>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <CardTitle className="text-lg sm:text-xl">{process.name}</CardTitle>
+          <Badge variant={getStatusBadgeVariant(process.status)} className="text-sm">
             {process.status}
           </Badge>
         </div>
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+        <div className="flex items-center space-x-2 text-xs sm:text-sm text-muted-foreground">
           <span>{formatDate(process.date)}</span>
         </div>
         <br />
-          <CardDescription className="text-md text-black font-bold">{process.timeStatus}</CardDescription>
+        <CardDescription className="text-md text-black font-bold">{process.timeStatus}</CardDescription>
       </CardHeader>
+
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <div className="flex items-center justify-between rounded-md bg-slate-100 p-2">
-            <span>Biomass Qty: {process.biomassQty}</span>
+          <div className="flex flex-wrap items-center justify-between rounded-md bg-slate-100 p-2">
+            <span className="text-sm sm:text-base">Biomass Qty: {process.biomassQty} tonne</span>
             <Button variant="ghost" size="icon">
               <Copy className="h-4 w-4" />
             </Button>
           </div>
-          <div className="flex items-center justify-between rounded-md bg-slate-100 p-2">
-            <span>Biochar Qty: {process.biocharQty}</span>
+          <div className="flex flex-wrap items-center justify-between rounded-md bg-slate-100 p-2">
+            <span className="text-sm sm:text-base">Biochar Qty: {process.biocharQty} Ltr.</span>
             <Button variant="ghost" size="icon">
               <Copy className="h-4 w-4" />
             </Button>
           </div>
         </div>
 
-        <div className="flex space-x-2">
-          <Badge variant="outline" className="flex items-center gap-1">
-            <Thermometer className="h-3 w-3" />
+        <div className="flex flex-wrap gap-2">
+          <Badge variant="outline" className="flex items-center gap-1 text-xs sm:text-sm">
+            <Thermometer className="h-4 w-4" />
             {process.mediaStatus.temperature}
           </Badge>
-          <Badge variant="outline" className="flex items-center gap-1">
-            <Camera className="h-3 w-3" />
+          <Badge variant="outline" className="flex items-center gap-1 text-xs sm:text-sm">
+            <Camera className="h-4 w-4" />
             {process.mediaStatus.images}
           </Badge>
-          <Badge variant="outline" className="flex items-center gap-1">
-            <Video className="h-3 w-3" />
+          <Badge variant="outline" className="flex items-center gap-1 text-xs sm:text-sm">
+            <Video className="h-4 w-4" />
             {process.mediaStatus.videos}
           </Badge>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="ghost">View Moisture</Button>
-        <Button variant="ghost">Add Details</Button>
+
+      <CardFooter className="flex flex-wrap justify-between gap-2 p-3">
+        <Button variant="ghost" className="text-md sm:text-md flex-1 min-w-[100px]">
+          View Moisture
+        </Button>
+        <Button variant="ghost" className="text-md sm:text-md flex-1 min-w-[100px]">
+          Add Details
+        </Button>
         <Button
           variant="ghost"
-          className={process.status === 'Completed' ? 'text-muted-foreground' : 'text-destructive'}
+          className={`text-md sm:text-md flex-1 min-w-[100px] ${process.status === 'Completed' ? 'text-muted-foreground' : 'text-destructive'
+            }`}
         >
           {process.status === 'Completed' ? 'Completed' : 'End Process'}
         </Button>
       </CardFooter>
-      {process.status === "Completed" ? (<></>) : (
-        <div className="w-[370px] rounded-md bg-red-200 mx-4 mb-4 px-4 py-1 text-red-500 text-sm font-semibold text-left">
-            <p>*Please upload at least {process.mediaStatus.images} Images, {process.mediaStatus.videos} Videos and {process.mediaStatus.temperature} Temperature</p>
-          </div>)}
+
+      {process.status !== "Completed" && (
+        <div className="w-full rounded-md bg-red-200 px-4 py-2 text-red-500 text-xs sm:text-sm font-semibold text-center sm:text-left">
+          <p>*Please upload at least {process.mediaStatus.images} Images, {process.mediaStatus.videos} Videos, and {process.mediaStatus.temperature} Temperature</p>
+        </div>
+      )}
+
     </Card>
   );
 };
+

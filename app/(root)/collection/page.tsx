@@ -4,9 +4,22 @@ import { CollectionCard } from '@/components/CollectionCard';
 import { SearchBar } from '@/components/SearchBar';
 import { TopNavbar } from '@/components/TopNavbar';
 import { FPUData } from '@/types';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-const Collection  = () => {
+const Collection = () => {
+
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check for authentication token in localStorage (or cookies)
+    const isAuthenticated = localStorage.getItem('authToken'); // You can use cookies/session if preferred.
+
+    // If user is not authenticated, redirect to the sign-in page
+    if (isAuthenticated !== "dummy-token") {
+      router.push('/sign-in'); // Assuming the auth page is at /auth
+    }
+  }, [router]);
 
   const [FPUData] = useState<FPUData[]>(
     [
@@ -100,7 +113,7 @@ const Collection  = () => {
         "date": "2025-02-27",
         "vehicleType": "GMC Canyon"
       }
-  ]
+    ]
   );
 
   const [filteredData, setFilteredData] = useState(FPUData);
@@ -109,13 +122,14 @@ const Collection  = () => {
     <div className="min-h-screen bg-gray-50">
       <TopNavbar />
       <SearchBar type="Collection" data={FPUData} onFilter={setFilteredData} />
-    <div className="grid grid-cols-3  w-full gap-6 p-6">
-            {filteredData.map((item, index) => (
-              <CollectionCard fpuData={item} key={index}/>
-            ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 p-4 sm:gap-6 sm:p-6">
+        {filteredData.map((item, index) => (
+          <CollectionCard fpuData={item} key={index} />
+        ))}
       </div>
+
     </div>
-    )
+  )
 }
 
 export default Collection

@@ -1,11 +1,12 @@
 // src/components/layout/TopNavbar.tsx
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from "next/link";
 import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -13,7 +14,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 
 const navItems = [
@@ -23,7 +24,18 @@ const navItems = [
     'Distribution',
 ]
 
+const sideNavItems = [
+    'Home',
+    'Collection',
+    'Production',
+    'Mixing',
+    'Distribution',
+]
+
 export const TopNavbar = () => {
+    const pathname = usePathname();
+
+    const [open, setOpen] = useState(false);
 
     const router = useRouter();
     let firstName, lastName;
@@ -39,16 +51,16 @@ export const TopNavbar = () => {
         localStorage.removeItem("authToken");
         // Redirect to Sign-In page
         router.push("/sign-in");
-      };
+    };
     return (
         <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 items-center">
+                <Link href="/" className="mr-6 flex items-center text-xl font-semibold space-x-2">
+                    <Image alt="logo" src="/logo_green.png" width={36} height={36} />
+                    <span className="hidden sm:inline-flex space-x-2">Reclimate</span>
+                </Link>
                 <div className="mr-4 hidden md:flex">
 
-                    <Link href="/" className="mr-6 flex items-center text-xl font-semibold space-x-2">
-                        <Image alt="logo" src="/logo_green.png" width={36} height={36} />
-                        Reclimate
-                    </Link>
 
                     <nav className="flex items-center space-x-6 text-sm font-medium">
                         {navItems.map((item) => (
@@ -64,11 +76,39 @@ export const TopNavbar = () => {
                     </nav>
                 </div>
 
-                <Button variant="ghost" className="md:hidden">
-                    <Menu className="h-6 w-6" />
-                </Button>
 
                 <div className="flex flex-1 items-center justify-end space-x-4">
+                    <Sheet open={open} onOpenChange={setOpen}>
+                        <SheetTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                                <Menu className="w-6 h-6" />
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="left" className="w-64">
+                            <SheetHeader className="text-xl font-bold mb-4 mt-2">
+                                <SheetTitle>Navigation</SheetTitle>
+                            </SheetHeader>
+                            <nav className="flex flex-col space-y-4 mt-6">
+                                {sideNavItems.map((item) => {
+                                    const itemPath = `/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`;
+                                    const isActive = pathname === itemPath;
+
+                                    return (
+                                        <Button
+                                            asChild
+                                            key={item}
+                                            variant="ghost"
+                                            className={`relative h-10 w-full justify-start ${isActive ? "bg-primary text-white" : ""}`}
+                                        >
+                                            <Link href={itemPath} className="text-lg font-semibold">
+                                                {item}
+                                            </Link>
+                                        </Button>
+                                    );
+                                })}
+                            </nav>
+                        </SheetContent>
+                    </Sheet>
                     <nav className="flex items-center space-x-2">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

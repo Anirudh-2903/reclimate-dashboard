@@ -4,9 +4,22 @@ import { MixingCard } from '@/components/MixingCard';
 import { SearchBar } from '@/components/SearchBar';
 import { TopNavbar } from '@/components/TopNavbar';
 import { MixData } from '@/types';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Mixing() {
+
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check for authentication token in localStorage (or cookies)
+    const isAuthenticated = localStorage.getItem('authToken'); // You can use cookies/session if preferred.
+
+    // If user is not authenticated, redirect to the sign-in page
+    if (isAuthenticated !== "dummy-token") {
+      router.push('/sign-in'); // Assuming the auth page is at /auth
+    }
+  }, [router]);
 
   const [mixings] = useState<MixData[]>(
     [
@@ -21,7 +34,7 @@ export default function Mixing() {
         "openBiochar": "50.00 Ltr",
         "totalUnpackedMix": "0.00 kg",
         "availableUnpackedMix": "0.00 kg",
-        "packagingDetails": "2 Bags",
+        "packagingDetails": "2 ",
         "otherMixQty": "50.00 kg",
         "viewLink": "#"
       },
@@ -36,7 +49,7 @@ export default function Mixing() {
         "openBiochar": "20.00 Ltr",
         "totalUnpackedMix": "10.00 kg",
         "availableUnpackedMix": "5.00 kg",
-        "packagingDetails": "1 Bag",
+        "packagingDetails": "1 ",
         "otherMixQty": "20.00 kg",
         "viewLink": "#"
       },
@@ -51,7 +64,7 @@ export default function Mixing() {
         "openBiochar": "50.00 Ltr",
         "totalUnpackedMix": "25.00 kg",
         "availableUnpackedMix": "10.00 kg",
-        "packagingDetails": "3 Bags",
+        "packagingDetails": "3 ",
         "otherMixQty": "60.00 kg",
         "viewLink": "#"
       },
@@ -66,7 +79,7 @@ export default function Mixing() {
         "openBiochar": "30.00 Ltr",
         "totalUnpackedMix": "10.00 kg",
         "availableUnpackedMix": "4.00 kg",
-        "packagingDetails": "2 Bags",
+        "packagingDetails": "2 ",
         "otherMixQty": "30.00 kg",
         "viewLink": "#"
       },
@@ -81,7 +94,7 @@ export default function Mixing() {
         "openBiochar": "90.00 Ltr",
         "totalUnpackedMix": "10.00 kg",
         "availableUnpackedMix": "2.00 kg",
-        "packagingDetails": "5 Bags",
+        "packagingDetails": "5 ",
         "otherMixQty": "80.00 kg",
         "viewLink": "#"
       },
@@ -96,7 +109,7 @@ export default function Mixing() {
         "openBiochar": "45.00 Ltr",
         "totalUnpackedMix": "15.00 kg",
         "availableUnpackedMix": "5.00 kg",
-        "packagingDetails": "3 Bags",
+        "packagingDetails": "3 ",
         "otherMixQty": "50.00 kg",
         "viewLink": "#"
       },
@@ -111,7 +124,7 @@ export default function Mixing() {
         "openBiochar": "60.00 Ltr",
         "totalUnpackedMix": "20.00 kg",
         "availableUnpackedMix": "7.00 kg",
-        "packagingDetails": "4 Bags",
+        "packagingDetails": "4 ",
         "otherMixQty": "70.00 kg",
         "viewLink": "#"
       },
@@ -126,7 +139,7 @@ export default function Mixing() {
         "openBiochar": "70.00 Ltr",
         "totalUnpackedMix": "20.00 kg",
         "availableUnpackedMix": "10.00 kg",
-        "packagingDetails": "4 Bags",
+        "packagingDetails": "4 ",
         "otherMixQty": "75.00 kg",
         "viewLink": "#"
       },
@@ -141,7 +154,7 @@ export default function Mixing() {
         "openBiochar": "45.00 Ltr",
         "totalUnpackedMix": "5.00 kg",
         "availableUnpackedMix": "2.00 kg",
-        "packagingDetails": "3 Bags",
+        "packagingDetails": "3 ",
         "otherMixQty": "40.00 kg",
         "viewLink": "#"
       },
@@ -156,7 +169,7 @@ export default function Mixing() {
         "openBiochar": "25.00 Ltr",
         "totalUnpackedMix": "15.00 kg",
         "availableUnpackedMix": "7.00 kg",
-        "packagingDetails": "2 Bags",
+        "packagingDetails": "2 ",
         "otherMixQty": "28.00 kg",
         "viewLink": "#"
       },
@@ -171,7 +184,7 @@ export default function Mixing() {
         "openBiochar": "50.00 Ltr",
         "totalUnpackedMix": "30.00 kg",
         "availableUnpackedMix": "12.00 kg",
-        "packagingDetails": "4 Bags",
+        "packagingDetails": "4 ",
         "otherMixQty": "55.00 kg",
         "viewLink": "#"
       },
@@ -186,7 +199,7 @@ export default function Mixing() {
         "openBiochar": "40.00 Ltr",
         "totalUnpackedMix": "5.00 kg",
         "availableUnpackedMix": "3.00 kg",
-        "packagingDetails": "3 Bags",
+        "packagingDetails": "3 ",
         "otherMixQty": "32.00 kg",
         "viewLink": "#"
       },
@@ -201,7 +214,7 @@ export default function Mixing() {
         "openBiochar": "95.00 Ltr",
         "totalUnpackedMix": "20.00 kg",
         "availableUnpackedMix": "8.00 kg",
-        "packagingDetails": "6 Bags",
+        "packagingDetails": "6 ",
         "otherMixQty": "85.00 kg",
         "viewLink": "#"
       },
@@ -216,13 +229,13 @@ export default function Mixing() {
         "openBiochar": "50.00 Ltr",
         "totalUnpackedMix": "25.00 kg",
         "availableUnpackedMix": "12.00 kg",
-        "packagingDetails": "4 Bags",
+        "packagingDetails": "4 ",
         "otherMixQty": "60.00 kg",
         "viewLink": "#"
       }
     ]
 
-    );
+  );
 
   const [filteredData, setFilteredData] = useState(mixings);
 
@@ -232,10 +245,10 @@ export default function Mixing() {
       <TopNavbar />
       <SearchBar type="Mixing" data={mixings} onFilter={setFilteredData} />
       <div className="max-w-7xl mx-auto py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredData.map((mixData) => (
-              <MixingCard key={mixData.id} mixData={mixData} />
-            ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 p-4 sm:gap-6 sm:p-6">
+          {filteredData.map((item, index) => (
+            <MixingCard mixData={item} key={index} />
+          ))}
         </div>
       </div>
     </div>

@@ -4,29 +4,26 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface MixingCardProps {
-    mixData: MixData;
+  mixData: MixData;
 }
 
 function formatDate(dateString: string) {
-  const date = new Date(dateString);  // Parse the date string
+  const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   };
-
-  // Convert the date to a long-form date without the weekday
-  const longFormDate = date.toLocaleDateString('en-US', options);
-
-  return longFormDate;
+  return date.toLocaleDateString("en-US", options);
 }
 
-export const MixingCard: React.FC<MixingCardProps> = ({mixData}) => {
+export const MixingCard: React.FC<MixingCardProps> = ({ mixData }) => {
   return (
-    <Card className="p-4 flex flex-col justify-between space-y-4 flex-grow">
+    <Card className="p-4 flex flex-col space-y-4 flex-grow shadow-lg rounded-lg bg-card text-card-foreground">
       <CardContent className="text-sm space-y-4">
-        <div className="flex justify-between">
-          <div className="flex items-center space-x-2 bg-slate-200 px-4 text-center rounded-full font-semibold text-muted-foreground my-4">
+        {/* Date & Image Section */}
+        <div className="flex flex-wrap items-center justify-between">
+          <div className="flex items-center space-x-2 bg-slate-200 px-4 py-1 rounded-full font-semibold text-muted-foreground">
             <div>{formatDate(mixData.date)}</div>
             <div>{mixData.time}</div>
           </div>
@@ -38,35 +35,27 @@ export const MixingCard: React.FC<MixingCardProps> = ({mixData}) => {
             className="h-16 w-16 rounded-full shadow-md"
           />
         </div>
-        <div>
-          <span className="font-semibold">Biochar Category:</span>  {mixData.category}
+
+        {/* Mix Data Details */}
+        <div className="space-y-2">
+          <p className="font-semibold">Biochar Category: <span className="font-normal">{mixData.category}</span></p>
+          <p className="font-semibold">Biochar Type: <span className="font-normal">{mixData.type}</span></p>
+          <p className="font-semibold">Volume Of Biochar: <span className="font-normal">{mixData.volume}</span></p>
+          <p className="font-semibold">Open Biochar: <span className="font-normal">{mixData.openBiochar}</span></p>
+          <p className="font-semibold">Total Unpacked Mix: <span className="font-normal">{mixData.totalUnpackedMix}</span></p>
+          <p className="font-semibold">Available Unpacked Mix: <span className="font-normal">{mixData.availableUnpackedMix}</span></p>
         </div>
-        <div>
-          <span className="font-semibold">Biochar Type:</span>  {mixData.type}
-        </div>
-        <div>
-          <span className="font-semibold">Volume Of Biochar:</span>  {mixData.volume}
-        </div>
-        <div>
-          <span className="font-semibold">Open Biochar:</span>  {mixData.openBiochar}
-        </div>
-        <div>
-          <span className="font-semibold">Total Unpacked Mix:</span>  {mixData.totalUnpackedMix}
-        </div>
-        <div>
-          <span className="font-semibold">Available Unpacked Mix:</span>  {mixData.availableUnpackedMix}
-        </div>
-        <div className="flex flex-row justify-between">
-          <div>
-            <span className="font-semibold">Packaging Details:</span>  {mixData.packagingDetails}
-          </div>
-          <Link href={mixData.viewLink} className="hover:text-green-500 transition-colors">
+
+        {/* Packaging & View Link */}
+        <div className="flex flex-wrap justify-between items-center">
+          <p className="font-semibold">Packaging Details: <span className="font-normal">{mixData.packagingDetails} {mixData.packagingDetails == "1 " ? "Bag" : "Bags"}</span></p>
+          <Link href={mixData.viewLink} className="text-green-500 hover:underline">
             View
           </Link>
         </div>
-        <div>
-          <span className="font-semibold">Other Mix Qty:</span>  {mixData.otherMixQty}
-        </div>
+
+        {/* Other Mix Quantity */}
+        <p className="font-semibold">Other Mix Qty: <span className="font-normal">{mixData.otherMixQty}</span></p>
       </CardContent>
     </Card>
   );
