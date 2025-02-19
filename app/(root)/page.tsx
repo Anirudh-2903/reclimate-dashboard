@@ -40,8 +40,8 @@ const Home = () => {
 
   const biocharStatistics = {
     statistics: [
-      { icon: <Package className="w-6 h-6 text-muted-foreground" />, label: "Total Packed", value: "1150.00 Ltr." },
-      { icon: <LucideTruck className="w-6 h-6 text-muted-foreground" />, label: "Total Shipped", value: "150.00 Ltr." }
+      { icon: <Package className="w-6 h-6 text-muted-foreground" />, label: "Total Packed:", value: "1150.00 Ltr." },
+      { icon: <LucideTruck className="w-6 h-6 text-muted-foreground" />, label: "Total Shipped:", value: "150.00 Ltr." }
     ],
     tableData: [
       { label: "Mix A", packed: "780.00", shipped: "0.00" },
@@ -83,9 +83,11 @@ const Home = () => {
           <Card className="mt-4 p-4">
             <CardContent>
               <div className="flex flex-col items-center space-y-2.5 p-6 my-2">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-center">
                   <Wheat className="w-6 h-6 text-muted-foreground" />
-                  <h3 className="font-semibold tracking-tight text-lg">Total Biomass Collected</h3>
+                  <h3 className="font-semibold tracking-tight text-lg whitespace-nowrap text-center">
+                    Total Biomass Collected
+                  </h3>
                 </div>
                 <div className="text-lg font-semibold">80.94 tons</div>
               </div>
@@ -99,6 +101,7 @@ const Home = () => {
               </div>
             </CardContent>
           </Card>
+
 
           {/* Biochar Statistics */}
           <Card className="mt-4 p-4">

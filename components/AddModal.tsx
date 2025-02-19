@@ -21,7 +21,7 @@ const CollectionDialog = () => (
       <div className="space-y-2">
         <Label>FPU Name</Label>
         <Select>
-          <SelectTrigger className="w-full"><SelectValue placeholder="Select FPU Name" /></SelectTrigger>
+          <SelectTrigger className="w-[95%] ml-2"><SelectValue placeholder="Select FPU Name" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="felda">FELDA Sungai Tengi</SelectItem>
             <SelectItem value="sample">Sample</SelectItem>
@@ -33,7 +33,7 @@ const CollectionDialog = () => (
       <div className="space-y-2">
         <Label>Vehicle Name</Label>
         <Select>
-          <SelectTrigger className="w-full"><SelectValue placeholder="Select Vehicle" /></SelectTrigger>
+          <SelectTrigger className="w-[95%] ml-2"><SelectValue placeholder="Select Vehicle" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="nissan">Nissan Frontier</SelectItem>
             <SelectItem value="ford">Ford Ranger</SelectItem>
@@ -44,7 +44,7 @@ const CollectionDialog = () => (
       <div className="space-y-2">
         <Label>Biomass Type</Label>
         <Select>
-          <SelectTrigger className="w-full"><SelectValue placeholder="Select Biomass Type" /></SelectTrigger>
+          <SelectTrigger className="w-[95%] ml-2"><SelectValue placeholder="Select Biomass Type" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="rice">Rice Stalk</SelectItem>
             <SelectItem value="bush">Encroacher Bush</SelectItem>
@@ -54,11 +54,11 @@ const CollectionDialog = () => (
       </div>
       <div className="space-y-2">
         <Label>Biomass Qty</Label>
-        <Input type="number" placeholder="2000 kg" className="w-full" />
+        <Input type="number" placeholder="2000 kg" className="w-[95%] ml-2" />
       </div>
       <div className="space-y-2">
         <Label>Add Biomass Image</Label>
-        <Input type="file" accept="image/jpeg,image/png,image/webp" className="w-full" />
+        <Input type="file" accept="image/jpeg,image/png,image/webp" className="w-[95%] ml-2"/>
       </div>
     </div>
 
