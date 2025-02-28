@@ -20,7 +20,7 @@ import { DateRange } from "react-day-picker";
 interface SearchBarProps {
   type: string;
   data: any[]; // The dataset coming from the parent page
-  onFilter: (filteredData: any[]) => void; // Callback to return filtered data
+  onFilter(filteredData: any[]) : void; // Callback to return filtered data
 }
 
 export const SearchBar = ({ type, data, onFilter }: SearchBarProps) => {

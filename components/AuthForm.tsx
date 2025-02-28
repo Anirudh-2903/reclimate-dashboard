@@ -1,12 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { signUp, signIn } from "@/services/authService";
+import { validatePassword, validateEmail } from "@/utils";
+import { FirebaseError } from "firebase/app";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./ui/tooltip";
+import { HelpCircle } from "lucide-react";
 
 const AuthForm = ({ type }: { type: string }) => {
     const [email, setEmail] = useState("");
@@ -15,45 +20,45 @@ const AuthForm = ({ type }: { type: string }) => {
     const [lastName, setLastName] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
-    const [isSignedUp, setIsSignedUp] = useState<boolean>(false);
     const router = useRouter();
 
-    useEffect(() => {
-        const signedUp = localStorage.getItem("isSignedUp") === "true";
-        setIsSignedUp(signedUp);
-    }, []);
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
 
         if (type === "sign-up") {
-            if (password !== confirmPassword) {
-                setError("Passwords do not match");
-                return;
-            }
-
-            localStorage.setItem("isSignedUp", "true");
-            localStorage.setItem("userEmail", email);
-            localStorage.setItem("userPassword", password);
-            localStorage.setItem("authToken", "dummy-token");
-            localStorage.setItem("firstName", firstName);
-            localStorage.setItem("lastName", lastName);
-            router.push("/");
+        // Validate email
+        const emailError = validateEmail(email);
+        if (emailError) {
+            setError(emailError);
+            return;
         }
 
-        if (type === "sign-in") {
-            if (!isSignedUp) {
-                setError("You must sign up first before signing in.");
-                return;
-            }
+        // Validate password
+        const passwordError = validatePassword(password);
+        if (passwordError) {
+            setError(passwordError);
+            return;
+        }
+        }
 
-            const storedEmail = localStorage.getItem("userEmail");
-            const storedPassword = localStorage.getItem("userPassword");
+        // Confirm password for sign-up
+        if (type === "sign-up" && password !== confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
 
-            if (email === storedEmail && password === storedPassword) {
-                localStorage.setItem("authToken", "dummy-token");
+        try {
+            if (type === "sign-up") {
+                await signUp(email, password, firstName, lastName);
                 router.push("/");
+            } else if (type === "sign-in") {
+                await signIn(email, password);
+                router.push("/");
+            }
+        } catch (error) {
+            if (error instanceof FirebaseError) {
+                setError(error.message);
             } else {
                 setError("Invalid email or password");
             }
@@ -85,6 +90,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
                                     required
+                                    className="mt-2"
                                 />
                             </div>
                             <div>
@@ -96,6 +102,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
                                     required
+                                    className="mt-2"
                                 />
                             </div>
                         </>
@@ -110,11 +117,36 @@ const AuthForm = ({ type }: { type: string }) => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            className="mt-2"
                         />
                     </div>
 
                     <div>
-                        <Label htmlFor="password">Password</Label>
+                        <div className="flex items-center flex-start gap-1">
+                            <Label htmlFor="password">Password</Label>
+                            {type == "sign-up" ?
+                                <>
+                            <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <button type="button" className="text-gray-400 hover:text-gray-500">
+                                        <HelpCircle className="h-4 w-4" />
+                                    </button>
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-xs">
+                                    <p className="text-sm">Password must: </p>
+                                        <ul className="list-disc list-inside mt-1">
+                                            <li>Be at least 8 characters long</li>
+                                            <li>Contain at least one uppercase letter</li>
+                                            <li>Contain at least one lowercase letter</li>
+                                            <li>Contain at least one number</li>
+                                            <li>Contain at least one special character</li>
+                                        </ul>
+                                </TooltipContent>
+                            </Tooltip>
+                            </TooltipProvider>
+                                </> : <></> }
+                        </div>
                         <Input
                             placeholder="Enter your password"
                             type="password"
@@ -122,6 +154,7 @@ const AuthForm = ({ type }: { type: string }) => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
+                            className="mt-2"
                         />
                     </div>
 
@@ -135,6 +168,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
+                                className="mt-2"
                             />
                         </div>
                     )}

@@ -6,10 +6,47 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
+import { toast } from "sonner";
+import {uploadCollectionData} from "@/services/dbService";
 
 
 
-const CollectionDialog = () => (
+const CollectionDialog = () => {
+
+  const [formData, setFormData] = useState({
+    fpuName: "",
+    date: new Date().toLocaleDateString("en-GB", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }),
+    vehicleType: "",
+  });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await uploadCollectionData(formData, imageFile);
+      toast.success("Uploaded successfully.");
+      // Reset form or close dialog
+    } catch (error) {
+      toast.error("Upload failed", {
+        description: error.message,
+      });
+    }
+  };
+
+  return (
   <DialogContent className="w-full max-w-sm sm:max-w-lg md:max-w-2xl p-4 sm:p-6 rounded-lg">
     <DialogHeader>
       <DialogTitle className="text-lg sm:text-xl font-bold">Collection Details</DialogTitle>
@@ -20,53 +57,54 @@ const CollectionDialog = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-[80vh] overflow-y-auto">
       <div className="space-y-2">
         <Label>FPU Name</Label>
-        <Select>
-          <SelectTrigger className="w-[95%] ml-2"><SelectValue placeholder="Select FPU Name" /></SelectTrigger>
+         <Select onValueChange={(value) => handleChange("fpuName", value)}>
+          <SelectTrigger className="w-[95%] ml-2"><SelectValue placeholder="Select FPU Name"  /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="felda">FELDA Sungai Tengi</SelectItem>
-            <SelectItem value="sample">Sample</SelectItem>
-            <SelectItem value="lemon">Lemon Myrtle</SelectItem>
-            <SelectItem value="sifu">Sifu Tani Farms</SelectItem>
+            <SelectItem value="FELDA Sungai Tengi">FELDA Sungai Tengi</SelectItem>
+            <SelectItem value="Sample">Sample</SelectItem>
+            <SelectItem value="Lemon Myrtle">Lemon Myrtle</SelectItem>
+            <SelectItem value="Sifu Tani Farms">Sifu Tani Farms</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div className="space-y-2">
         <Label>Vehicle Name</Label>
-        <Select>
+        <Select onValueChange={(value) => handleChange("vehicleType", value)}>
           <SelectTrigger className="w-[95%] ml-2"><SelectValue placeholder="Select Vehicle" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="nissan">Nissan Frontier</SelectItem>
-            <SelectItem value="ford">Ford Ranger</SelectItem>
-            <SelectItem value="toyota">Toyota Hilux</SelectItem>
+            <SelectItem value="Nissan Frontier">Nissan Frontier</SelectItem>
+            <SelectItem value="Ford Ranger">Ford Ranger</SelectItem>
+            <SelectItem value="Toyota Hilux">Toyota Hilux</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div className="space-y-2">
         <Label>Biomass Type</Label>
-        <Select>
+        <Select onValueChange={(value) => handleChange("biomassDetails.source", value)} >
           <SelectTrigger className="w-[95%] ml-2"><SelectValue placeholder="Select Biomass Type" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="rice">Rice Stalk</SelectItem>
-            <SelectItem value="bush">Encroacher Bush</SelectItem>
-            <SelectItem value="cotton">Cotton Stalk</SelectItem>
+            <SelectItem value="Rice Stalk">Rice Stalk</SelectItem>
+            <SelectItem value="Encroacher Bush">Encroacher Bush</SelectItem>
+            <SelectItem value="Cotton Stalk">Cotton Stalk</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div className="space-y-2">
         <Label>Biomass Qty</Label>
-        <Input type="number" placeholder="2000 kg" className="w-[95%] ml-2" />
+        <Input type="number" placeholder="2000 kg" className="w-[95%] ml-2" onChange={(e) => handleChange("biomassDetails.weight", e.target.value + " kg")} />
       </div>
       <div className="space-y-2">
         <Label>Add Biomass Image</Label>
-        <Input type="file" accept="image/jpeg,image/png,image/webp" className="w-[95%] ml-2"/>
+        <Input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleFileChange} className="w-[95%] ml-2"/>
       </div>
     </div>
 
     <div className="flex justify-end pt-4">
-      <Button type="submit" className="w-full sm:w-auto">Submit</Button>
+      <Button type="submit" onClick={handleSubmit} className="w-full sm:w-auto">Submit</Button>
     </div>
   </DialogContent>
 );
+};
 
 const ProductionDialog = () => {
   const [step, setStep] = useState(1);

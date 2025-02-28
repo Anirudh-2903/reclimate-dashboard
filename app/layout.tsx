@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner"
 import "./globals.css";
 
 const geistSans = Geist({
@@ -53,12 +54,12 @@ export default function RootLayout({
         <link rel="icon" href="/logo_green.png" sizes="any" />
         <link rel="icon" href="/logo_green.png" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/logo_green.png" />
-        <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+      <Toaster richColors />
       </body>
     </html>
   );

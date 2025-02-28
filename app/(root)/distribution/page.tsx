@@ -2,24 +2,32 @@
 
 import { DistributionCard } from '@/components/DistributionCard';
 import { SearchBar } from '@/components/SearchBar';
-import { TopNavbar } from '@/components/TopNavbar';
 import { DistributionRecord } from '@/types';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
+import {onAuthStateChanged} from "@firebase/auth";
+import {auth} from "@/firebase";
+import {getUserData} from "@/services/dbService";
 
 export default function Distribution() {
 
   const router = useRouter();
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // User is signed in
+      const uid = user.uid;
 
-  useEffect(() => {
-    // Check for authentication token in localStorage (or cookies)
-    const isAuthenticated = localStorage.getItem('authToken'); // You can use cookies/session if preferred.
-
-    // If user is not authenticated, redirect to the sign-in page
-    if (isAuthenticated !== "dummy-token") {
-      router.push('/sign-in'); // Assuming the auth page is at /auth
+      try {
+        // Fetch user data using the UID
+        const userData = await getUserData(uid);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    } else {
+      // User is signed out
+      router.push("/sign-in");
     }
-  }, [router]);
+  });
 
   const [distributions] = useState<DistributionRecord[]>(
     [
@@ -163,7 +171,6 @@ export default function Distribution() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <TopNavbar />
       <SearchBar type="Distribution" data={distributions} onFilter={setFilteredData} />
       <div className="max-w-7xl mx-auto py-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 p-4 sm:gap-6 sm:p-6">

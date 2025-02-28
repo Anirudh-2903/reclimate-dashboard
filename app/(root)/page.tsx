@@ -1,28 +1,14 @@
 // pages/index.tsx
 "use client";
 
-import React, { useEffect } from 'react';
-import { TopNavbar } from '@/components/TopNavbar';
+import React from "react";
 import { CircleCheck, LucideXCircle, LucideAlertCircle, Recycle, Leaf, LucideTruck, LucidePackage, Wheat, Package, ChartCandlestick } from "lucide-react";
 import {
   Card,
   CardContent,
 } from "@/components/ui/card";
-import { useRouter } from 'next/navigation';
 
 const Home = () => {
-
-  const router = useRouter();
-
-  useEffect(() => {
-    // Check for authentication token in localStorage (or cookies)
-    const isAuthenticated = localStorage.getItem('authToken'); // You can use cookies/session if preferred.
-
-    // If user is not authenticated, redirect to the sign-in page
-    if (isAuthenticated !== "dummy-token") {
-      router.push('/sign-in'); // Assuming the auth page is at /auth
-    }
-  }, [router]);
 
   const ProducedStatuses = [
     { label: "Approved", value: "0.00 kL", icon: CircleCheck, color: "text-green-500" },
@@ -52,7 +38,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <TopNavbar />
       <div className="flex flex-col items-center w-full min-h-screen p-6 bg-gray-50">
         <div className="w-full max-w-4xl mt-6 space-y-6">
           <h2 className="text-2xl font-semibold text-center text-gray-700">

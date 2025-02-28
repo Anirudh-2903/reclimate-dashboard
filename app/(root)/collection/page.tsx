@@ -2,24 +2,33 @@
 
 import { CollectionCard } from '@/components/CollectionCard';
 import { SearchBar } from '@/components/SearchBar';
-import { TopNavbar } from '@/components/TopNavbar';
 import { FPUData } from '@/types';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import {onAuthStateChanged} from "@firebase/auth";
+import {auth} from "@/firebase";
+import {getUserData} from "@/services/dbService";
 
 const Collection = () => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    // Check for authentication token in localStorage (or cookies)
-    const isAuthenticated = localStorage.getItem('authToken'); // You can use cookies/session if preferred.
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            // User is signed in
+            const uid = user.uid;
 
-    // If user is not authenticated, redirect to the sign-in page
-    if (isAuthenticated !== "dummy-token") {
-      router.push('/sign-in'); // Assuming the auth page is at /auth
-    }
-  }, [router]);
+            try {
+                // Fetch user data using the UID
+                const userData = await getUserData(uid);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        } else {
+            // User is signed out
+            router.push("/sign-in");
+        }
+    });
 
   const [FPUData] = useState<FPUData[]>(
     [
@@ -120,7 +129,6 @@ const Collection = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <TopNavbar />
       <SearchBar type="Collection" data={FPUData} onFilter={setFilteredData} />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 p-4 sm:gap-6 sm:p-6">
         {filteredData.map((item, index) => (
