@@ -1,15 +1,6 @@
 export type Status = 'In Progress' | 'Completed' | 'Pending' | 'Blocked' | 'Unassigned';
+export type Assessment = 'Approved' | 'Rejected' | 'Unassessed';
 
-export interface MediaStatus {
-  temperature: number;
-  images: number;
-  videos: number;
-}
-
-export interface BioMassDetails {
-  source: string;
-  weight: string;
-}
 
 export interface MixData {
   id: number;
@@ -43,22 +34,33 @@ export interface DistributionRecord {
 
 export interface FPUData {
   fpuName: string;
-  biomassDetails: BioMassDetails;
+  biomassDetails: {
+    source: string;
+    weight: string;
+  };
   date: string;
   vehicleType: string;
+  imageUrl: string;
 }
 
-export interface ProcessItem {
-  id: string;
-  name: string;
+export interface ProductionData {
+  biomassName: string;
   date: string;
   status: Status;
-  timeStatus: string;
+  assessment: Assessment;
+  startTime: string;
   biomassQty: string;
   biocharQty: string;
-  approved: boolean;
-  rejected?: boolean;
-  mediaStatus: MediaStatus;
+  moistureContent: Record<string, string>;
+  moistureImage: string;
+  thermometerImages: string[];
+  videos: string[];
+  additionalImages: string[];
+  mediaStatus: {
+    temperature: number;
+    addImages: number;
+    videos: number;
+  };
 }
 
 export interface DateRange {
@@ -66,10 +68,5 @@ export interface DateRange {
   endDate: Date;
 }
 
-export interface FilterState {
-  search: string;
-  dateRange: DateRange;
-  status?: Status;
-}
 
-export type NavItems = 'Collection'|'Production'|'Mixing'|'Distribution';
+

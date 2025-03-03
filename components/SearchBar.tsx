@@ -26,8 +26,8 @@ interface SearchBarProps {
 export const SearchBar = ({ type, data, onFilter }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [dateRange, setDateRange] = React.useState<DateRange>({
-    from: new Date(2025, 1, 1),
-    to: new Date(2025, 2, 1)
+    from: new Date(2024, 11, 1),
+    to: new Date()
   })
   // Track if user has selected a date
 
@@ -50,7 +50,7 @@ export const SearchBar = ({ type, data, onFilter }: SearchBarProps) => {
           item.fpuName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           item.vehicleType.toLowerCase().includes(searchTerm.toLowerCase()) ||
           item.biomassDetails.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (!isNaN(numericSearch) && item.biomassDetails.weight >= numericSearch) ||
+          (!isNaN(numericSearch) && Number(item.biomassDetails.weight.split(" ")[0]) >= numericSearch) ||
           item.date.includes(searchTerm);
 
         const matchesDate =
@@ -67,8 +67,8 @@ export const SearchBar = ({ type, data, onFilter }: SearchBarProps) => {
           !searchTerm ||
           item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           item.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (!isNaN(numericSearch) && parseFloat(item.biomassQty) >= numericSearch) ||
-          (!isNaN(numericSearch) && parseFloat(item.biocharQty) >= numericSearch) ||
+          (!isNaN(numericSearch) && Number(item.biomassQty.split(" ")[0]) >= numericSearch) ||
+          (!isNaN(numericSearch) && Number(item.biocharQty.split(" ")[0]) >= numericSearch) ||
           item.date.includes(searchTerm);
 
         const matchesDate =
@@ -85,9 +85,9 @@ export const SearchBar = ({ type, data, onFilter }: SearchBarProps) => {
           !searchTerm ||
           item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
           item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (!isNaN(numericSearch) && parseFloat(item.totalUnpackedMix) >= numericSearch) ||
-          (!isNaN(numericSearch) && parseFloat(item.availableUnpackedMix) >= numericSearch) ||
-          (!isNaN(numericSearch) && parseFloat(item.otherMixQty) >= numericSearch) ||
+          (!isNaN(numericSearch) && Number(item.totalUnpackedMix.split(" ")[0]) >= numericSearch) ||
+          (!isNaN(numericSearch) && Number(item.availableUnpackedMix.split(" ")[0]) >= numericSearch) ||
+          (!isNaN(numericSearch) && Number(item.otherMixQty.split(" ")[0]) >= numericSearch) ||
           item.date.includes(searchTerm);
 
         const matchesDate =
@@ -104,7 +104,7 @@ export const SearchBar = ({ type, data, onFilter }: SearchBarProps) => {
           !searchTerm ||
           item.farmerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           item.distributionType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (!isNaN(numericSearch) && parseFloat(item.distributionQty) >= numericSearch) ||
+          (!isNaN(numericSearch) && Number(item.distributionQty.split(" ")[0]) >= numericSearch) ||
           item.buyerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           item.vehicle.toLowerCase().includes(searchTerm.toLowerCase()) ||
           item.date.includes(searchTerm);

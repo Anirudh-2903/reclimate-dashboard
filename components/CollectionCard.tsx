@@ -29,8 +29,8 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({ fpuData }) => {
           loading="lazy"
           width={48}
           height={48}
-          className="rounded-md w-12 h-12 sm:w-16 sm:h-16"
-          src="/placeholder.svg"
+          className="rounded-md w-12 h-12 sm:w-16 sm:h-16 object-cover"
+          src={fpuData.imageUrl}
         />
       </div>
 

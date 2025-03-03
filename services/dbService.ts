@@ -12,25 +12,28 @@ export interface CollectionData {
     date: string;
     vehicleType: string;
     imageUrl?: string;
+    createdAt: string;
 }
 
 export interface ProductionData {
-    name: string;
+    biomassName: string;
     date: string;
     status: string;
-    timeStatus: string;
+    assessment: string;
+    startTime: string;
     biomassQty: string;
     biocharQty: string;
-    approved: boolean;
+    createdAt: string;
+    moistureContent: Record<string, string>;
+    moistureImage: string;
+    thermometerImages: string[];
+    videos: string[];
+    additionalImages: string[];
     mediaStatus: {
         temperature: number;
-        images: number;
+        addImages: number;
         videos: number;
     };
-    moistureReadings: number[];
-    images: string[];
-    videos: string[];
-    assessment: string;
 }
 
 export interface MixingData {
@@ -41,6 +44,7 @@ export interface MixingData {
     packagingDetails: string;
     availableUnpackedMix: string;
     otherMixQty: string;
+    createdAt: string;
 }
 
 export interface DistributionData {
@@ -51,43 +55,80 @@ export interface DistributionData {
     distributionType: string;
     distributionQty: string;
     imageUrl?: string;
+    createdAt: string;
 }
 
-export const uploadFile = async (file: File) => {
-    const storageRef = ref(storage, `uploads/${Date.now()}_${file.name}`);
-    await uploadBytes(storageRef, file);
-    return await getDownloadURL(storageRef);
+export   const uploadFile = async (file: File, path: string) => {
+    const fileRef = ref(storage, `uploads/${path}/${file.name}`);
+    await uploadBytes(fileRef, file);
+    return getDownloadURL(fileRef);
 };
 
 export const uploadCollectionData = async (data: CollectionData, imageFile?: File) => {
     if (imageFile) {
-        data.imageUrl = await uploadFile(imageFile);
+        data.imageUrl = await uploadFile(imageFile,"collectionImages");
     }
     return await addDoc(collection(db, "collections"), data);
 };
 
+
 export const uploadProductionData = async (data: ProductionData, files: {
-    moistureImage?: File;
-    thermometerImages?: File[];
-    videos?: File[];
-    additionalImages?: File[];
-}) => {
-    const uploads = await Promise.all([
-        files.moistureImage ? uploadFile(files.moistureImage) : null,
-        ...(files.thermometerImages?.map(uploadFile) || []),
-        ...(files.videos?.map(uploadFile) || []),
-        ...(files.additionalImages?.map(uploadFile) || []),
-    ]);
+        moistureImage?: File;
+        thermometerImages?: File[];
+        videos?: File[];
+        additionalImages?: File[];
+    }) => {
+    try {
+        const dataToUpload = { ...data };
 
-    data.images = uploads.filter(url => url) as string[];
-    data.videos = []; // Separate videos if needed
-    data.mediaStatus = {
-        temperature: files.thermometerImages?.length || 0,
-        images: data.images.length,
-        videos: files.videos?.length || 0
-    };
+        // Upload moisture image and get URL
+        if (files.moistureImage) {
+            dataToUpload.moistureImage = await uploadFile(files?.moistureImage, "moistureImages");
+        }
 
-    return await addDoc(collection(db, "productions"), data);
+        // Upload thermometer images (wait for all promises to resolve)
+        if (files.thermometerImages && files.thermometerImages?.length > 0) {
+            const thermometerPromises = files.thermometerImages?.map(file =>
+                uploadFile(file, "thermometerImages")
+            );
+            dataToUpload.thermometerImages = await Promise.all(thermometerPromises);
+        } else {
+            dataToUpload.thermometerImages = [];
+        }
+
+        // Upload videos (wait for all promises to resolve)
+        if (files.videos && files.videos.length > 0) {
+            const videoPromises = files.videos.map(file =>
+                uploadFile(file, "videos")
+            );
+            dataToUpload.videos = await Promise.all(videoPromises);
+        } else {
+            dataToUpload.videos = [];
+        }
+
+        // Upload additional images (wait for all promises to resolve)
+        if (files.additionalImages && files.additionalImages.length > 0) {
+            const imagePromises = files.additionalImages.map(file =>
+                uploadFile(file, "additionalImages")
+            );
+            dataToUpload.additionalImages = await Promise.all(imagePromises);
+        } else {
+            dataToUpload.additionalImages = [];
+        }
+
+        // Update media status
+        dataToUpload.mediaStatus = {
+            temperature: dataToUpload.thermometerImages.length,
+            addImages: dataToUpload.additionalImages.length,
+            videos: dataToUpload.videos.length,
+        };
+
+        // Upload data to Firestore
+        return await addDoc(collection(db, "productions"), dataToUpload);
+    } catch (error) {
+        console.error("Error uploading production data:", error);
+        throw error;
+    }
 };
 
 export const uploadMixingData = async (data: MixingData) => {
@@ -96,7 +137,7 @@ export const uploadMixingData = async (data: MixingData) => {
 
 export const uploadDistributionData = async (data: DistributionData, imageFile?: File) => {
     if (imageFile) {
-        data.imageUrl = await uploadFile(imageFile);
+        data.imageUrl = await uploadFile(imageFile,"distributionImages");
     }
     return await addDoc(collection(db, "distributions"), data);
 };

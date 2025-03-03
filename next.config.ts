@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
+// next.config.js
+const NextConfig = {
+    images: {
+        domains: ['firebasestorage.googleapis.com'], // Add Firebase Storage domain here
+    },
 };
 
-export default nextConfig;
+export default NextConfig;
