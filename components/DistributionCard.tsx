@@ -37,7 +37,7 @@ export const DistributionCard: React.FC<DistributionCardProps> = ({
               height="64"
               decoding="async"
               className="h-12 w-12 sm:h-16 sm:w-16 rounded-full shadow-md"
-              src="/placeholder.svg"
+              src={distributionData.imageUrl}
               style={{ color: "transparent" }}
             />
           </div>

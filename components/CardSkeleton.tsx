@@ -41,7 +41,7 @@ export const CardSkeletonCollection = () => {
     );
 };
 
-export default function ProductionCardSkeleton() {
+export const CardSkeletonProduction= () => {
     return (
         <div className="min-h-screen bg-gray-50">
             <SearchBarSkeleton />
@@ -94,6 +94,86 @@ export default function ProductionCardSkeleton() {
                     </div>
                 </Card>
                 ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export const CardSkeletonMixing = () => {return (
+            <div className="min-h-screen bg-gray-50">
+                <SearchBarSkeleton />
+                <div className="max-w-7xl mx-auto py-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 p-4 sm:gap-6 sm:p-6">
+                        {[...Array(7)].map((_, index) => (
+                            <Card className="p-4 flex flex-col space-y-4 flex-grow shadow-lg rounded-lg bg-card text-card-foreground" key={index}>
+                                <CardContent className="text-sm space-y-4">
+                                    {/* Date & Image Section */}
+                                    <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-4">
+                                        <div className="flex items-center space-x-2 bg-slate-200 px-4 py-1 rounded-full font-semibold text-muted-foreground text-xs sm:text-sm">
+                                            <Skeleton className="w-16 h-4" />
+                                            <Skeleton className="w-12 h-4" />
+                                        </div>
+                                        <Skeleton className="h-14 w-14 sm:h-16 sm:w-16 rounded-full" />
+                                    </div>
+
+                                    {/* Mix Data Details */}
+                                    <div className="grid gap-2 text-sm sm:text-base">
+                                        <Skeleton className="w-full h-4" />
+                                        <Skeleton className="w-3/4 h-4" />
+                                        <Skeleton className="w-4/5 h-4" />
+                                        <Skeleton className="w-2/3 h-4" />
+                                        <Skeleton className="w-5/6 h-4" />
+                                        <Skeleton className="w-3/4 h-4" />
+                                        <Skeleton className="w-full h-4" />
+                                        <Skeleton className="w-2/3 h-4" />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+            </div>
+    );
+}
+
+export const CardSkeletonDistribution = () => {return (
+        <div className="min-h-screen bg-gray-50">
+            <SearchBarSkeleton />
+            <div className="max-w-7xl mx-auto py-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 p-4 sm:gap-6 sm:p-6">
+                    {[...Array(7)].map((_, index) => (
+                        <Card className="rounded-lg border overflow-hidden flex flex-col bg-card text-card-foreground shadow-lg h-full animate-pulse" key={index}>
+                            <CardHeader className="space-y-4 flex-grow flex flex-col justify-between p-4 sm:p-6">
+                                <div className="space-y-4 text-sm">
+                                    {/* Date & Time Section */}
+                                    <div className="flex flex-wrap justify-between items-center">
+                                        <div className="flex items-center space-x-2 bg-slate-200 px-4 py-1 text-center rounded-full font-semibold text-muted-foreground">
+                                            <Skeleton className="w-16 h-4" />
+                                            <Skeleton className="w-16 h-4" />
+                                        </div>
+                                        <Skeleton className="h-12 w-12 sm:h-16 sm:w-16 rounded-full" />
+                                    </div>
+
+                                    {/* Distribution Details */}
+                                    <div className="grid gap-2 text-sm sm:text-base">
+                                        <Skeleton className="w-3/4 h-4" />
+                                        <Skeleton className="w-2/3 h-4" />
+                                        <Skeleton className="w-1/2 h-4" />
+                                        <Skeleton className="w-3/5 h-4" />
+                                    </div>
+                                </div>
+                            </CardHeader>
+
+                            {/* Footer (Vehicle Info) */}
+                            <CardFooter className="flex justify-end">
+                                <div className="flex items-center bg-slate-100 px-2 py-1 rounded">
+                                    <Skeleton className="w-4 h-4 rounded-full" />
+                                    <Skeleton className="ml-1 w-16 h-4" />
+                                </div>
+                            </CardFooter>
+                        </Card>
+                    ))}
                 </div>
             </div>
         </div>

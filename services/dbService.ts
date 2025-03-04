@@ -41,6 +41,8 @@ export interface MixingData {
     category: string;
     type: string;
     volume: string;
+    openBiochar: string;
+    totalUnpackedMix: string;
     packagingDetails: string;
     availableUnpackedMix: string;
     otherMixQty: string;

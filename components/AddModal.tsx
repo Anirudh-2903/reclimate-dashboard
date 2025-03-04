@@ -7,14 +7,16 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import {useCallback, useState} from "react";
 import { toast } from "sonner";
-import {uploadCollectionData, uploadMixingData, uploadProductionData} from "@/services/dbService";
+import {
+  uploadCollectionData,
+  uploadDistributionData,
+  uploadMixingData,
+  uploadProductionData
+} from "@/services/dbService";
 import {Loader2} from "lucide-react";
 
 const Status = ['In Progress' , 'Completed' , 'Pending' , 'Blocked' , 'Unassigned'];
 const Assessment = ['Approved' , 'Rejected' , 'Unassessed'];
-
-
-
 
 
 const CollectionDialog = () => {
@@ -32,13 +34,16 @@ const CollectionDialog = () => {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
 
+  // @ts-ignore
   const handleChange = useCallback((field, value) => {
     setFormData((prev) => {
       if (field.includes(".")) {
         const [parent, child] = field.split(".");
+
         return {
           ...prev,
           [parent]: {
+            // @ts-ignore
             ...prev[parent],
             [child]: value,
           },
@@ -49,12 +54,13 @@ const CollectionDialog = () => {
     });
   }, []);
 
+  // @ts-ignore
   const handleFileChange = useCallback((e) => {
     setImageFile(e.target.files[0]);
   }, []);
 
   const validateForm = () => {
-    if (!formData.fpuName || !formData.date || !formData.vehicleType || !formData.biomassDetails.source || !formData.biomassDetails.weight) {
+    if (!formData.fpuName || !formData.date || !formData.vehicleType || !formData.biomassDetails.source || !formData.biomassDetails.weight || !imageFile) {
       toast.error("Please fill all required fields.");
       return false;
     }
@@ -82,11 +88,13 @@ const CollectionDialog = () => {
       };
 
       // Upload the data (replace with your upload logic)
+      // @ts-ignore
       await uploadCollectionData(finalData, imageFile);
       toast.success("Uploaded successfully.");
       // Reset form or close dialog
     } catch (error) {
       toast.error("Upload failed", {
+        // @ts-ignore
         description: error.message,
       });
     } finally {
@@ -198,6 +206,7 @@ const ProductionDialog = () => {
         return {
           ...prev,
           [parent]: {
+            // @ts-ignore
             ...prev[parent],
             [child]: value,
           },
@@ -246,7 +255,7 @@ const ProductionDialog = () => {
   const validateForm = () => {
     const { biomassName, date, status, biomassQty, biocharQty } = formData;
 
-    if (!biomassName || !date || !status || !biomassQty || !biocharQty) {
+    if (!biomassName || !date || !status || !biomassQty || !biocharQty || !thermometerImages || !additionalImages || !moistureImage || !videos) {
       toast.error( "Error",{
         description: "Please fill all required fields.",
       });
@@ -603,13 +612,15 @@ const MixingDialog = () => {
     category: "",
     type: "",
     volume: "",
+    openBiochar: "",
+    totalUnpackedMix: "",
     packagingDetails: "",
     availableUnpackedMix: "",
     otherMixQty: "",
     createdAt: new Date().toISOString(),
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
-
+  // @ts-ignore
   const handleChange = useCallback((field, value) => {
     setFormData((prev) => {
       if (field.includes(".")) {
@@ -617,6 +628,7 @@ const MixingDialog = () => {
         return {
           ...prev,
           [parent]: {
+            // @ts-ignore
             ...prev[parent],
             [child]: value,
           },
@@ -626,13 +638,13 @@ const MixingDialog = () => {
       }
     });
   }, []);
-
+  // @ts-ignore
   const handleFileChange = useCallback((e) => {
     setImageFile(e.target.files[0]);
   }, []);
 
   const validateForm = () => {
-    if (!formData.category || !formData.date || !formData.type || !formData.volume || !formData.packagingDetails || !formData.availableUnpackedMix || !formData.otherMixQty) {
+    if (!formData.category || !formData.date || !formData.type || !formData.volume || !formData.packagingDetails || !formData.availableUnpackedMix || !formData.otherMixQty || !formData.openBiochar || !formData.totalUnpackedMix || !imageFile) {
       toast.error("Please fill all required fields.");
       return false;
     }
@@ -660,11 +672,13 @@ const MixingDialog = () => {
       };
 
       // Upload the data (replace with your upload logic)
+      // @ts-ignore
       await uploadMixingData(finalData, imageFile);
       toast.success("Uploaded successfully.");
       // Reset form or close dialog
     } catch (error) {
       toast.error("Upload failed", {
+        // @ts-ignore
         description: error.message,
       });
     } finally {
@@ -677,7 +691,7 @@ const MixingDialog = () => {
       <DialogHeader>
         <DialogTitle className="text-xl font-bold">Biochar Details</DialogTitle>
         <DialogDescription className="text-sm text-muted-foreground">
-          Step {step} of 2
+          Step {step} of 3
         </DialogDescription>
       </DialogHeader>
 
@@ -702,30 +716,58 @@ const MixingDialog = () => {
             <Label htmlFor="biocharType">Biochar Type</Label>
             <Input type="text" placeholder="Compose" id="biocharType" onChange={(e) => handleChange("type", e.target.value)} />
           </div>
-
+          <div className="space-y-2">
+            <Label>Date</Label>
+            <Input type="date" placeholder="DD/MM/YYYY" onChange={(e) => handleChange("date", e.target.value)} />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="volumeOfBiochar">Volume Of Biochar</Label>
-            <Input type="number" placeholder="200 Ltr" id="volumeOfBiochar" />
+            <Input type="number" placeholder="200 Ltr" id="volumeOfBiochar" onChange={(e) => handleChange("volume", e.target.value + " Ltr")}/>
           </div>
         </div>
       )}
 
-      {/* Step 2: Final Details & Submit */}
       {step === 2 && (
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="openBiochar">Open Biochar</Label>
+              <Input type="number" placeholder="200 Ltr" id="openBiochar" onChange={(e) => handleChange("openBiochar", e.target.value + " Ltr")} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="totalUnpackedMix">Total Unpacked Mix</Label>
+              <Input type="number" placeholder="20.00 kg" id="totalUnpackedMix" onChange={(e) => handleChange("totalUnpackedMix", e.target.value + " kg")} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="availableUnpackedMix">Available Unpacked Mix</Label>
+              <Input type="number" placeholder="20.00 kg" id="availableUnpackedMix" onChange={(e) => handleChange("availableUnpackedMix", e.target.value + " kg")} />
+            </div>
+          </div>
+      )}
+
+
+      {step === 3 && (
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="availableUnpackedMix">Available Unpacked Mix</Label>
-            <Input type="number" placeholder="20.00 kg" id="availableUnpackedMix" />
-          </div>
-
-          <div className="space-y-2">
             <Label htmlFor="packagingDetails">Packaging Details</Label>
-            <Input type="number" placeholder="8 Bags" id="packagingDetails" />
+            <Input
+                type="number"
+                placeholder="8 Bags"
+                id="packagingDetails"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const suffix = value === "1" ? "Bag" : "Bags";
+                  handleChange("packagingDetails", `${value} ${suffix}`);
+                }}
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="otherMixQty">Other Mix Qty</Label>
-            <Input type="number" placeholder="200.00 kg" id="otherMixQty" />
+            <Input type="number" placeholder="200.00 kg" id="otherMixQty" onChange={(e) => handleChange("otherMixQty", e.target.value + " kg")} />
+          </div>
+          <div className="space-y-2">
+            <Label>Add BioChar Image</Label>
+            <Input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleFileChange} className="w-[95%] ml-2"/>
           </div>
         </div>
       )}
@@ -734,18 +776,102 @@ const MixingDialog = () => {
       {/* Navigation Buttons */}
       <div className="flex justify-between">
         {step > 1 ? <Button variant="outline" onClick={prevStep}>Back</Button> : <div />}
-        {step < 2 ? <Button onClick={nextStep}>Next</Button> : <Button type="submit">Submit</Button>}
+        {step < 3 ? <Button onClick={nextStep}>Next</Button> : <Button type="submit" disabled={isLoading} onClick={handleSubmit}>{isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Uploading...
+            </>
+        ) : (
+            "Submit"
+        )}</Button>}
       </div>
     </DialogContent>
   );
 };
-
 
 const DistributionDialog = () => {
   const [step, setStep] = useState(1);
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [formData, setFormData] = useState({
+    date: "",
+    farmerName: "",
+    vehicle: "",
+    buyerName: "",
+    distributionType: "",
+    distributionQty: "",
+    createdAt: new Date().toISOString(),
+  });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  // @ts-ignore
+  const handleChange = useCallback((field, value) => {
+    setFormData((prev) => {
+      if (field.includes(".")) {
+        const [parent, child] = field.split(".");
+        return {
+          ...prev,
+          [parent]: {
+            // @ts-ignore
+            ...prev[parent],
+            [child]: value,
+          },
+        };
+      } else {
+        return { ...prev, [field]: value };
+      }
+    });
+  }, []);
+  // @ts-ignore
+  const handleFileChange = useCallback((e) => {
+    setImageFile(e.target.files[0]);
+  }, []);
+
+  const validateForm = () => {
+    if (!formData.farmerName || !formData.date || !formData.buyerName || !formData.distributionType || !formData.distributionQty || !imageFile) {
+      toast.error("Please fill all required fields.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+
+    try {
+      const formattedDate = new Date(formData.date).toLocaleDateString("en-GB", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+
+      // Prepare the final data with the formatted date
+      const finalData = {
+        ...formData,
+        date: formattedDate,
+      };
+
+      // Upload the data (replace with your upload logic)
+      // @ts-ignore
+      await uploadDistributionData(finalData, imageFile);
+      toast.success("Uploaded successfully.");
+      // Reset form or close dialog
+    } catch (error) {
+      toast.error("Upload failed", {
+        // @ts-ignore
+        description: error.message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [formData, imageFile]);
 
 
   const farmerNames = [
@@ -782,7 +908,7 @@ const DistributionDialog = () => {
           {/* Farmer Name */}
           <div className="space-y-2">
             <Label htmlFor="farmerName">Farmer Name</Label>
-            <Select>
+            <Select onValueChange={(value) => handleChange("farmerName", value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Farmer Name" />
               </SelectTrigger>
@@ -797,7 +923,7 @@ const DistributionDialog = () => {
           {/* Vehicle Name */}
           <div className="space-y-2">
             <Label htmlFor="vehicleName">Vehicle Name</Label>
-            <Select>
+            <Select onValueChange={(value) => handleChange("vehicle", value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Vehicle" />
               </SelectTrigger>
@@ -812,7 +938,7 @@ const DistributionDialog = () => {
           {/* Buyer Name */}
           <div className="space-y-2">
             <Label htmlFor="buyerName">Buyer Name</Label>
-            <Select>
+            <Select onValueChange={(value) => handleChange("buyerName", value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Buyer Name" />
               </SelectTrigger>
@@ -823,13 +949,17 @@ const DistributionDialog = () => {
               </SelectContent>
             </Select>
           </div>
+          <div className="space-y-2">
+            <Label>Date</Label>
+            <Input type="date" placeholder="DD/MM/YYYY" onChange={(e) => handleChange("date", e.target.value)} />
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4">
           {/* Distribution Type */}
           <div className="space-y-2">
             <Label htmlFor="distributionType">Distribution Type</Label>
-            <Select>
+            <Select onValueChange={(value) => handleChange("distributionType", value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Distribution Type" />
               </SelectTrigger>
@@ -849,6 +979,7 @@ const DistributionDialog = () => {
               placeholder="Enter quantity"
               id="distributionQty"
               name="distributionQty"
+              onChange={(e) => handleChange("distributionQty", e.target.value + " kg")}
             />
           </div>
 
@@ -859,6 +990,7 @@ const DistributionDialog = () => {
               type="file"
               accept="image/jpeg,image/jpg,image/png,image/webp"
               id="distributionImage"
+              onChange={handleFileChange}
             />
           </div>
         </div>
@@ -867,13 +999,18 @@ const DistributionDialog = () => {
       {/* Buttons */}
       <div className="flex justify-between">
         {step > 1 ? <Button variant="outline" onClick={prevStep}>Back</Button> : <div />}
-        {step < 2 ? <Button onClick={nextStep}>Next</Button> : <Button type="submit">Submit</Button>}
+        {step < 2 ? <Button onClick={nextStep}>Next</Button> :  <Button type="submit" disabled={isLoading} onClick={handleSubmit}>{isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Uploading...
+            </>
+        ) : (
+            "Submit"
+        )}</Button>}
       </div>
     </DialogContent>
   );
 };
-
-
 
 
 export const AddModal = ({ type }: { type: string }) => {

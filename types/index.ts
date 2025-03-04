@@ -6,7 +6,7 @@ export interface MixData {
   id: number;
   date: string;
   time: string;
-  imageSrc: string;
+  imageUrl: string;
   category: string;
   type: string;
   volume: string;
@@ -22,7 +22,7 @@ export interface DistributionRecord {
   id: number;
   date: string;
   time: string;
-  imageSrc: string;
+  imageUrl: string;
   farmerName: string;
   distributionType: string;
   distributionQty: string;

@@ -8,7 +8,7 @@ import {useEffect, useState} from 'react';
 import {onAuthStateChanged} from "@firebase/auth";
 import {auth, db} from "@/firebase";
 import {collection, getDocs} from "@firebase/firestore";
-import ProductionCardSkeleton from "@/components/CardSkeleton";
+import {CardSkeletonProduction} from "@/components/CardSkeleton";
 import ErrorState from "@/components/ErrorAlert";
 import {NoResults} from "@/components/NoResults";
 
@@ -25,6 +25,7 @@ export default function Production() {
       if (user) {
         try {
           const querySnapshot = await getDocs(collection(db, "productions"));
+          // @ts-ignore
           const data = querySnapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
@@ -44,7 +45,7 @@ export default function Production() {
     return () => unsubscribe();
   }, [router]);
 
-  if (loading) return <ProductionCardSkeleton />
+  if (loading) return <CardSkeletonProduction />
   if (error) return <ErrorState error={error} onRetry={() => window.location.reload()} />;
   if(filteredData.length === 0) return (
       <div className="min-h-screen bg-gray-50">
