@@ -27,6 +27,7 @@ const Collection = () => {
             if (user) {
                 try {
                     const querySnapshot = await getDocs(collection(db, "collections"));
+                    // @ts-ignore
                     const data = querySnapshot.docs.map(doc => ({
                         id: doc.id,
                         ...doc.data()

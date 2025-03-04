@@ -44,6 +44,7 @@ export interface MixingData {
     packagingDetails: string;
     availableUnpackedMix: string;
     otherMixQty: string;
+    imageUrl?: string;
     createdAt: string;
 }
 
@@ -131,7 +132,10 @@ export const uploadProductionData = async (data: ProductionData, files: {
     }
 };
 
-export const uploadMixingData = async (data: MixingData) => {
+export const uploadMixingData = async (data: MixingData, imageFile?: File) => {
+    if (imageFile) {
+        data.imageUrl = await uploadFile(imageFile,"mixingImages");
+    }
     return await addDoc(collection(db, "mixings"), data);
 };
 

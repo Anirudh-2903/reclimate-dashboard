@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import {useCallback, useState} from "react";
 import { toast } from "sonner";
-import {uploadCollectionData, uploadProductionData} from "@/services/dbService";
+import {uploadCollectionData, uploadMixingData, uploadProductionData} from "@/services/dbService";
 import {Loader2} from "lucide-react";
 
 const Status = ['In Progress' , 'Completed' , 'Pending' , 'Blocked' , 'Unassigned'];
@@ -596,6 +596,82 @@ const MixingDialog = () => {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [formData, setFormData] = useState({
+    date: "",
+    category: "",
+    type: "",
+    volume: "",
+    packagingDetails: "",
+    availableUnpackedMix: "",
+    otherMixQty: "",
+    createdAt: new Date().toISOString(),
+  });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const handleChange = useCallback((field, value) => {
+    setFormData((prev) => {
+      if (field.includes(".")) {
+        const [parent, child] = field.split(".");
+        return {
+          ...prev,
+          [parent]: {
+            ...prev[parent],
+            [child]: value,
+          },
+        };
+      } else {
+        return { ...prev, [field]: value };
+      }
+    });
+  }, []);
+
+  const handleFileChange = useCallback((e) => {
+    setImageFile(e.target.files[0]);
+  }, []);
+
+  const validateForm = () => {
+    if (!formData.category || !formData.date || !formData.type || !formData.volume || !formData.packagingDetails || !formData.availableUnpackedMix || !formData.otherMixQty) {
+      toast.error("Please fill all required fields.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+
+    try {
+      const formattedDate = new Date(formData.date).toLocaleDateString("en-GB", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+
+      // Prepare the final data with the formatted date
+      const finalData = {
+        ...formData,
+        date: formattedDate,
+      };
+
+      // Upload the data (replace with your upload logic)
+      await uploadMixingData(finalData, imageFile);
+      toast.success("Uploaded successfully.");
+      // Reset form or close dialog
+    } catch (error) {
+      toast.error("Upload failed", {
+        description: error.message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [formData, imageFile]);
+
   return (
     <DialogContent className="max-w-md w-full p-6 sm:p-8 space-y-6 rounded-lg">
       <DialogHeader>
@@ -610,7 +686,7 @@ const MixingDialog = () => {
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="biocharCategory">Biochar Category</Label>
-            <Select>
+            <Select onValueChange={(value) => handleChange("category", value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select Biochar Category" />
               </SelectTrigger>
@@ -624,7 +700,7 @@ const MixingDialog = () => {
 
           <div className="space-y-2">
             <Label htmlFor="biocharType">Biochar Type</Label>
-            <Input type="text" placeholder="Compose" id="biocharType" />
+            <Input type="text" placeholder="Compose" id="biocharType" onChange={(e) => handleChange("type", e.target.value)} />
           </div>
 
           <div className="space-y-2">

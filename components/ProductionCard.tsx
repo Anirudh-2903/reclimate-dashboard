@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Copy, Thermometer, Camera, Video, CircleAlert, CheckCircle2, XCircle } from 'lucide-react';
 import { ProductionData } from '@/types';
@@ -19,9 +20,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 
 // Function to determine badge color based on status
-const getStatusBadgeColor = (status) => {
+const getStatusBadgeColor = (status: string) => {
   switch (status) {
     case 'In Progress':
       return 'bg-green-100 text-green-800 hover:bg-green-200';
@@ -39,7 +41,7 @@ const getStatusBadgeColor = (status) => {
 };
 
 // Function to determine assessment icon and color
-const getAssessmentIcon = (assessment) => {
+const getAssessmentIcon = (assessment: string) => {
   switch (assessment) {
     case 'Approved':
       return { icon: <CheckCircle2 className="w-5 h-5 text-green-500" />, text: 'Approved' };
@@ -154,7 +156,7 @@ export const ProductionCard: React.FC<ProcessCardProps> = ({ process }) => {
                       {process.thermometerImages.map((image, index) => (
                           <div key={index} className="relative">
                             {!loadedMedia[image] && <Skeleton className="w-full h-32 rounded-md" />}
-                            <img
+                            <Image
                                 src={image}
                                 alt={`Thermometer Image ${index + 1}`}
                                 className={`w-full h-auto rounded-md ${!loadedMedia[image] ? 'hidden' : 'block'}`}
@@ -188,7 +190,7 @@ export const ProductionCard: React.FC<ProcessCardProps> = ({ process }) => {
                       {process.additionalImages.map((image, index) => (
                           <div key={index} className="relative">
                             {!loadedMedia[image] && <Skeleton className="w-full h-32 rounded-md" />}
-                            <img
+                            <Image
                                 src={image}
                                 alt={`Additional Image ${index + 1}`}
                                 className={`w-full h-auto rounded-md ${!loadedMedia[image] ? 'hidden' : 'block'}`}
@@ -277,7 +279,7 @@ export const ProductionCard: React.FC<ProcessCardProps> = ({ process }) => {
                       <h4 className="font-semibold">Moisture Image:</h4>
                       <div className="relative">
                         {!loadedMedia[process.moistureImage] && <Skeleton className="w-full h-48 rounded-md" />}
-                        <img
+                        <Image
                             src={process.moistureImage}
                             alt="Moisture Image"
                             className={`w-full h-auto rounded-md ${!loadedMedia[process.moistureImage] ? 'hidden' : 'block'}`}
