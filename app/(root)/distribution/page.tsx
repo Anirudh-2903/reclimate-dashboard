@@ -30,7 +30,8 @@ export default function Distribution() {
             id: doc.id,
             ...doc.data()
           })) as DistributionRecord[];
-          setDistributionData(data);
+          const sortedData = data.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); // Sort by ISO string
+          setDistributionData(sortedData);
         } catch (error) {
           console.error("Error fetching data:", error);
           setError('Failed to fetch data');

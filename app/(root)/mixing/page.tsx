@@ -29,8 +29,9 @@ export default function Mixing() {
           const data = querySnapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
-          })) as MixData[];
-          setMixingData(data);
+          })) as MixData[]
+          const sortedData = data.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); // Sort by ISO string
+          setMixingData(sortedData);
         } catch (error) {
           console.error("Error fetching data:", error);
           setError('Failed to fetch data');

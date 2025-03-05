@@ -16,6 +16,7 @@ export interface MixData {
   packagingDetails: string;
   otherMixQty: string;
   viewLink: string;
+  createdAt: string;
 }
 
 export interface DistributionRecord {
@@ -28,6 +29,7 @@ export interface DistributionRecord {
   distributionQty: string;
   buyerName: string;
   vehicle: string;
+  createdAt: string;
 }
 
 
@@ -41,6 +43,7 @@ export interface FPUData {
   date: string;
   vehicleType: string;
   imageUrl: string;
+  createdAt: string;
 }
 
 export interface ProductionData {
@@ -53,6 +56,7 @@ export interface ProductionData {
   biocharQty: string;
   moistureContent: Record<string, string>;
   moistureImage: string;
+  createdAt: string;
   thermometerImages: string[];
   videos: string[];
   additionalImages: string[];

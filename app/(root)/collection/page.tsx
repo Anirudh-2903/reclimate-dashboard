@@ -32,7 +32,8 @@ const Collection = () => {
                         id: doc.id,
                         ...doc.data()
                     })) as FPUData[];
-                    setFPUData(data);
+                    const sortedData = data.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); // Sort by ISO string
+                    setFPUData(sortedData);
                 } catch (error) {
                     console.error("Error fetching data:", error);
                     setError('Failed to fetch data');

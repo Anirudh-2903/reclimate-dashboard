@@ -30,7 +30,8 @@ export default function Production() {
             id: doc.id,
             ...doc.data()
           })) as ProductionData[];
-          setProductionData(data);
+          const sortedData = data.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); // Sort by ISO string
+          setProductionData(sortedData);
         } catch (error) {
           console.error("Error fetching data:", error);
           setError('Failed to fetch data');

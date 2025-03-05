@@ -148,7 +148,7 @@ return (
       </div>
       <div className="space-y-2">
         <Label>Biomass Qty</Label>
-        <Input type="number" placeholder="2000 kg" className="w-[95%] ml-2" onChange={(e) => handleChange("biomassDetails.weight", e.target.value + " kg")} />
+        <Input type="number" placeholder="2000 kg"  className="w-[95%] ml-2" onChange={(e) => handleChange("biomassDetails.weight", e.target.value + " kg")} />
       </div>
       <div className="space-y-2">
         <Label>Add Biomass Image</Label>
@@ -410,8 +410,8 @@ const ProductionDialog = () => {
             </div>
         )}
 
-        {/* Step 2: Quantity & Time */}
-        {step === 2 && (
+        {/* Step 3: Quantity & Time */}
+        {step === 3 && (
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label>Start Time</Label>
@@ -465,48 +465,6 @@ const ProductionDialog = () => {
                   </Select>
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label>Biomass Qty</Label>
-                <Input
-                    type="number"
-                    placeholder="2000 kg"
-                    value={formData.biomassQty}
-                    onChange={(e) => handleChange("biomassQty", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Biochar Qty</Label>
-                <Input
-                    type="number"
-                    placeholder="370 Ltr"
-                    value={formData.biocharQty}
-                    onChange={(e) => handleChange("biocharQty", e.target.value)}
-                />
-              </div>
-            </div>
-        )}
-
-        {/* Step 3: Moisture Content */}
-        {step === 3 && (
-            <div className="space-y-4">
-              <Label>Moisture %</Label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {formData.moistureContent.map((value, index) => (
-                    <Input
-                        key={index}
-                        type="number"
-                        placeholder={`Moisture ${index + 1}`}
-                        value={value}
-                        onChange={(e) => handleMoistureChange(index, e.target.value)}
-                    />
-                ))}
-              </div>
-            </div>
-        )}
-
-        {/* Step 4: File Uploads & Assessment */}
-        {step === 4 && (
-            <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <Label htmlFor="moistureContentImage">Moisture Content Image</Label>
@@ -528,7 +486,6 @@ const ProductionDialog = () => {
                       onChange={handleThermometerImagesChange}
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="videos">Videos</Label>
                   <Input
@@ -550,6 +507,48 @@ const ProductionDialog = () => {
                       onChange={handleAdditionalImagesChange}
                   />
                 </div>
+              </div>
+            </div>
+        )}
+
+        {/* Step 2: Moisture Content */}
+        {step === 2 && (
+            <div className="space-y-4">
+              <Label>Moisture %</Label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {formData.moistureContent.map((value, index) => (
+                    <Input
+                        key={index}
+                        type="number"
+                        placeholder={`Moisture ${index + 1}`}
+                        value={value}
+                        onChange={(e) => handleMoistureChange(index, e.target.value)}
+                    />
+                ))}
+              </div>
+            </div>
+        )}
+
+        {/* Step 4: File Uploads & Assessment */}
+        {step === 4 && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Biomass Qty</Label>
+                <Input
+                    type="number"
+                    placeholder="2000 kg"
+                    value={formData.biomassQty}
+                    onChange={(e) => handleChange("biomassQty", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Biochar Qty</Label>
+                <Input
+                    type="number"
+                    placeholder="370 Ltr"
+                    value={formData.biocharQty}
+                    onChange={(e) => handleChange("biocharQty", e.target.value)}
+                />
               </div>
 
               <div className="space-y-2">
