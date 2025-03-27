@@ -7,6 +7,10 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {ChatbotInterface} from "@/components/ChatBotInterface";
+import {ReportGenerator} from "@/components/ReportGenerator";
+
 
 const Home = () => {
 
@@ -40,92 +44,115 @@ const Home = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="flex flex-col items-center w-full min-h-screen p-6 bg-gray-50">
         <div className="w-full max-w-4xl mt-6 space-y-6">
-          <h2 className="text-2xl font-semibold text-center text-gray-700">
-            Site Summary
-          </h2>
+          <Tabs defaultValue="dashboard" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 rounded-lg">
+              <TabsTrigger
+                  value="dashboard"
+                  className="font-semibold rounded-lg text-sm data-[state=active]:bg-green-200 data-[state=active]:shadow-sm"
+              >
+                Dashboard
+              </TabsTrigger>
+              <TabsTrigger
+                  value="chatbot"
+                  className="font-semibold rounded-lg text-sm data-[state=active]:bg-green-200 data-[state=active]:shadow-sm"
+              >
+                Biochar AI Assistant
+              </TabsTrigger>
+            </TabsList>
 
-          {/* Total Produced Biochar */}
-          <Card className="rounded-lg border shadow-sm p-4 bg-card text-card-foreground">
-            <CardContent className="flex flex-col items-center justify-between p-6 space-y-1.5">
-              <div className="flex items-center gap-2">
-                <Leaf className="w-6 h-6 text-muted-foreground" />
-                <h3 className="font-semibold tracking-tight text-lg">Total Produced Biochar</h3>
-              </div>
-              <div className="text-lg font-semibold">2.328 kL</div>
-            </CardContent>
-            <CardContent className="grid grid-cols-3 gap-4 mt-4 p-6 pt-0">
-              {ProducedStatuses.map(({ label, value, icon: Icon, color }) => (
-                <div key={label} className="flex flex-col items-center">
-                  <Icon className={`w-6 h-6 ${color}`} />
-                  <p className="mt-2 text-sm">{label}</p>
-                  <p className="text-sm font-semibold">{value}</p>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Total Biomass Collected */}
-          <Card className="mt-4 p-4">
-            <CardContent>
-              <div className="flex flex-col items-center space-y-2.5 p-6 my-2">
-                <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-center">
-                  <Wheat className="w-6 h-6 text-muted-foreground" />
-                  <h3 className="font-semibold tracking-tight text-lg whitespace-nowrap text-center">
-                    Total Biomass Collected
-                  </h3>
-                </div>
-                <div className="text-lg font-semibold">80.94 tons</div>
-              </div>
-              <div className="p-6 pt-0 space-y-4">
-                {CollectedStatuses.map(({ label, value }) => (
-                  <div key={label} className="flex justify-between">
-                    <p className="text-md text-muted-foreground">{label}</p>
-                    <p className="text-md font-semibold">{value}</p>
+            <TabsContent value="dashboard">
+              <h2 className="text-2xl my-6 font-semibold text-center text-gray-700">
+                Site Summary
+              </h2>
+              {/* Total Produced Biochar */}
+              <Card className="rounded-lg border shadow-sm p-4 bg-card text-card-foreground">
+                <CardContent className="flex flex-col items-center justify-between p-6 space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <Leaf className="w-6 h-6 text-muted-foreground" />
+                    <h3 className="font-semibold tracking-tight text-lg">Total Produced Biochar</h3>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  <div className="text-lg font-semibold">2.328 kL</div>
+                </CardContent>
+                <CardContent className="grid grid-cols-3 gap-4 mt-4 p-6 pt-0">
+                  {ProducedStatuses.map(({ label, value, icon: Icon, color }) => (
+                      <div key={label} className="flex flex-col items-center">
+                        <Icon className={`w-6 h-6 ${color}`} />
+                        <p className="mt-2 text-sm">{label}</p>
+                        <p className="text-sm font-semibold">{value}</p>
+                      </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Total Biomass Collected */}
+              <Card className="mt-4 p-4">
+                <CardContent>
+                  <div className="flex flex-col items-center space-y-2.5 p-6 my-2">
+                    <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-center">
+                      <Wheat className="w-6 h-6 text-muted-foreground" />
+                      <h3 className="font-semibold tracking-tight text-lg whitespace-nowrap text-center">
+                        Total Biomass Collected
+                      </h3>
+                    </div>
+                    <div className="text-lg font-semibold">80.94 tons</div>
+                  </div>
+                  <div className="p-6 pt-0 space-y-4">
+                    {CollectedStatuses.map(({ label, value }) => (
+                        <div key={label} className="flex justify-between">
+                          <p className="text-md text-muted-foreground">{label}</p>
+                          <p className="text-md font-semibold">{value}</p>
+                        </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
 
 
-          {/* Biochar Statistics */}
-          <Card className="mt-4 p-4">
-            <CardContent>
-              <div className="flex flex-col items-center space-y-2.5 p-6">
-                <div className="flex items-center gap-2">
-                  <ChartCandlestick className="w-6 h-6 text-muted-foreground" />
-                  <h3 className="font-semibold tracking-tight text-lg">Biochar Statistics</h3>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-20 mt-4 p-6">
-                {biocharStatistics.statistics.map((item, index) => (
-                  <div key={index} className="flex flex-col items-center">
-                    {item.icon}
-                    <p className="mt-2 text-sm">{item.label}</p>
-                    <p className="text-sm font-semibold">{item.value}</p>
-                  </div>))}
-              </div>
-              <div className="overflow-x-auto mt-4">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="border px-4 py-2 text-left text-muted-foreground">Sack</th>
-                      <th className="border px-4 py-2 text-left text-muted-foreground">Packed (Ltr)</th>
-                      <th className="border px-4 py-2 text-left text-muted-foreground">Shipped (Ltr)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {biocharStatistics.tableData.map((row, index) => (
-                      <tr key={index} className="bg-card text-card-foreground">
-                        <td className="border px-4 py-2 text-muted-foreground">{row.label}</td>
-                        <td className="border px-4 py-2 text-muted-foreground">{row.packed}</td>
-                        <td className="border px-4 py-2 text-muted-foreground">{row.shipped}</td>
-                      </tr>))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+              {/* Biochar Statistics */}
+              <Card className="mt-4 p-4">
+                <CardContent>
+                  <div className="flex flex-col items-center space-y-2.5 p-6">
+                    <div className="flex items-center gap-2">
+                      <ChartCandlestick className="w-6 h-6 text-muted-foreground" />
+                      <h3 className="font-semibold tracking-tight text-lg">Biochar Statistics</h3>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-20 mt-4 p-6">
+                    {biocharStatistics.statistics.map((item, index) => (
+                        <div key={index} className="flex flex-col items-center">
+                          {item.icon}
+                          <p className="mt-2 text-sm">{item.label}</p>
+                          <p className="text-sm font-semibold">{item.value}</p>
+                        </div>))}
+                  </div>
+                  <div className="overflow-x-auto mt-4">
+                    <table className="w-full border-collapse">
+                      <thead>
+                      <tr className="bg-gray-100">
+                        <th className="border px-4 py-2 text-left text-muted-foreground">Sack</th>
+                        <th className="border px-4 py-2 text-left text-muted-foreground">Packed (Ltr)</th>
+                        <th className="border px-4 py-2 text-left text-muted-foreground">Shipped (Ltr)</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {biocharStatistics.tableData.map((row, index) => (
+                          <tr key={index} className="bg-card text-card-foreground">
+                            <td className="border px-4 py-2 text-muted-foreground">{row.label}</td>
+                            <td className="border px-4 py-2 text-muted-foreground">{row.packed}</td>
+                            <td className="border px-4 py-2 text-muted-foreground">{row.shipped}</td>
+                          </tr>))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="chatbot">
+              <ChatbotInterface />
+              <ReportGenerator />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
