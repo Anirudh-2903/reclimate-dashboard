@@ -2,7 +2,7 @@
 // next.config.js
 const NextConfig = {
     images: {
-        domains: ['firebasestorage.googleapis.com'], // Add Firebase Storage domain here
+        domains: ['firebasestorage.googleapis.com'],
     },
     eslint : {
         ignoreDuringBuilds: true,

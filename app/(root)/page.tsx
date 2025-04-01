@@ -12,7 +12,8 @@ import { ChatbotInterface } from "@/components/ChatBotInterface";
 import { ReportGenerator } from "@/components/ReportGenerator";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase";
-import { ProductionData, MixData, DistributionRecord, FPUData } from "@/types"; // Adjust the import path
+import { ProductionData, MixData, DistributionRecord, FPUData } from "@/types";
+import { formatVolume, formatWeight } from "@/lib/utils";
 
 const Home = () => {
   const [producedBiochar, setProducedBiochar] = useState({
@@ -31,20 +32,6 @@ const Home = () => {
     totalShipped: 0
   });
   const [loading, setLoading] = useState(true);
-
-  const formatWeight = (value: number) => {
-    if (value >= 1000) {
-      return `${(value / 1000).toFixed(2)} ton`;
-    }
-    return `${value.toFixed(2)} kg`;
-  };
-
-  const formatVolume = (value: number) => {
-    if (value >= 1000) {
-      return `${(value / 1000).toFixed(2)} kL`;
-    }
-    return `${value.toFixed(2)} L`;
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,7 +104,7 @@ const Home = () => {
           pending,
           mixed,
           shipped,
-          applied: 0, // You'll need to add this data source if needed
+          applied: 0,
           total
         });
 
@@ -258,7 +245,11 @@ const Home = () => {
 
               <TabsContent value="chatbot">
                 <ChatbotInterface />
-                <ReportGenerator />
+                <ReportGenerator
+                    producedBiochar={producedBiochar}
+                    biomassCollected={biomassCollected}
+                    biocharStats={biocharStats}
+                />
               </TabsContent>
             </Tabs>
           </div>

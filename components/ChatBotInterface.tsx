@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { fetchAIResponse } from "@/services/aiResponse";
+import {fetchAIChatResponse } from "@/services/aiResponse";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from "rehype-raw";
@@ -120,7 +120,7 @@ export function ChatbotInterface() {
         setIsLoading(true);
 
         try {
-            const botMessageContent = await fetchAIResponse(input);
+            const botMessageContent = await fetchAIChatResponse(input);
             console.log(botMessageContent);
             const botMessage: Message = {
                 id: (Date.now() + 1).toString(),
