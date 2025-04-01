@@ -1,5 +1,5 @@
 export type Status = 'In Progress' | 'Completed' | 'Pending' | 'Blocked' | 'Unassigned';
-export type Assessment = 'Approved' | 'Rejected' | 'Unassessed';
+export type Assessment = 'Approved' | 'Rejected' | 'Pending';
 
 
 export interface MixData {

@@ -45,7 +45,7 @@ const getAssessmentIcon = (assessment: string) => {
       return { icon: <CheckCircle2 className="w-5 h-5 text-green-500" />, text: 'Approved' };
     case 'Rejected':
       return { icon: <XCircle className="w-5 h-5 text-red-500" />, text: 'Rejected' };
-    case 'Unassessed':
+    case 'Pending':
       return { icon: <CircleAlert className="w-5 h-5 text-yellow-500" />, text: 'Unassessed' };
     default:
       return { icon: <CircleAlert className="w-5 h-5 text-gray-500" />, text: 'Unassessed' };

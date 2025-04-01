@@ -16,7 +16,7 @@ import {
 import {Loader2} from "lucide-react";
 
 const Status = ['In Progress' , 'Completed' , 'Pending' , 'Blocked' , 'Unassigned'];
-const Assessment = ['Approved' , 'Rejected' , 'Unassessed'];
+const Assessment = ['Approved' , 'Rejected' , 'Pending'];
 
 
 const CollectionDialog = () => {

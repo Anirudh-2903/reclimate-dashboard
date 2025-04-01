@@ -5,11 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, Loader2 } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { Progress } from "@/components/ui/progress";
 
@@ -72,7 +67,7 @@ export function ReportGenerator() {
             </CardHeader>
 
             <CardContent className="grid gap-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="w-full gap-4">
                     <div className="space-y-2">
                         <Label htmlFor="reportName">Report Name</Label>
                         <Input
@@ -81,70 +76,6 @@ export function ReportGenerator() {
                             onChange={(e) => setParams({...params, reportName: e.target.value})}
                             placeholder="Enter report name"
                         />
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        {/* Start Date */}
-                        <div className="space-y-2">
-                            <Label className="text-sm md:text-base">Start Date</Label>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        className={cn(
-                                            "w-full justify-start text-left font-normal",
-                                            "text-sm md:text-base",
-                                            "h-10 md:h-9 px-3",
-                                            !params.startDate && "text-muted-foreground"
-                                        )}
-                                    >
-                                        <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                                        <span className="truncate">
-            {params.startDate ? format(params.startDate, "PP") : "Pick a date"}
-          </span>
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0">
-                                    <Calendar
-                                        mode="single"
-                                        selected={params.startDate}
-                                        onSelect={(date) => date && setParams({...params, startDate: date})}
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                        </div>
-
-                        {/* End Date */}
-                        <div className="space-y-2">
-                            <Label className="text-sm md:text-base">End Date</Label>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        className={cn(
-                                            "w-full justify-start text-left font-normal",
-                                            "text-sm md:text-base",
-                                            "h-10 md:h-9 px-3",
-                                            !params.endDate && "text-muted-foreground"
-                                        )}
-                                    >
-                                        <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                                        <span className="truncate">
-            {params.endDate ? format(params.endDate, "PP") : "Pick a date"}
-          </span>
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0">
-                                    <Calendar
-                                        mode="single"
-                                        selected={params.endDate}
-                                        onSelect={(date) => date && setParams({...params, endDate: date})}
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                        </div>
                     </div>
                 </div>
 
