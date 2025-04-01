@@ -1,4 +1,3 @@
-// app/api/generate-report/route.ts
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
 
@@ -25,13 +24,10 @@ export async function POST(req: Request) {
                                 **Generated on**: ${date} in the format of "28th January, 2025"
                                 
                                ## Executive Summary
-                                [Concise 3-5 bullet points summarizing key findings]
+                                [Concise  paragraph summarizing key findings]
                                 
                                 ## Methodology  
-                                [Bulleted list of methods]
-                                - Method 1
-                                - Method 2
-                                - Method 3
+                                [Concise paragraph summarizing list of methods]
                                 
                                 ## Production Data
                                 ### Biochar Production
@@ -49,12 +45,12 @@ export async function POST(req: Request) {
                                 - Present results clearly
                                 
                                 ## Quality Assurance
-                                [Verification processes]
+                                [Verification processes as a paragraph]
                                 - Describe verification processes
                                 - Highlight any quality metrics
                                 
                                 ## Appendices
-                                [Supplementary data]
+                                [Supplementary data as a paragraph]
                                 - Raw data references
                                 - Additional technical details
                                 
@@ -62,6 +58,7 @@ export async function POST(req: Request) {
                                 
                                 1. PAGE LAYOUT:
                                 - Never begin a section within 2cm of page bottom
+                                - Minimise vertical space & unnecessary line breaks
                                 - Maintain 1.5cm margins on all sides
                                 - Keep page numbers at absolute footer (1cm from bottom)
                                 - If last page has <25% content, redistribute to previous pages

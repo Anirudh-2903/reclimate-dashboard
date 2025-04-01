@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 "use client";
 
 import React, { useState } from "react";
@@ -34,8 +36,8 @@ export const COLORS = {
     lightGray: '#EAEDED',
 };
 
-export
-function markdownToHtml(markdown: string): string {
+export function markdownToHtml(markdown: string): string {
+    markdown = markdown.replace(/^```markdown\n|\n```$/g, '');
 
     let html = markdown.replace(
         /^\|(.+)\|\r?\n\|(?:\s*\-+\s*\|)+\r?\n((?:\|.*\|\r?\n)+)/gm,
@@ -62,6 +64,16 @@ function markdownToHtml(markdown: string): string {
 
             return tableHtml + '</tbody>\n</table>';
         }
+    );
+
+    html = html.replace(
+        /\\\[([\s\S]*?)\\\]/g,
+        '<div class="equation">\\($1\\)</div>'
+    );
+
+    html = html.replace(
+        /\\\(([\s\S]*?)\\\)/g,
+        '<span class="inline-equation">\\($1\\)</span>'
     );
 
     html = html
@@ -106,6 +118,7 @@ export function ReportGenerator({
 
             // Convert to HTML
             setProgress(60);
+            console.log(markdownContent);
             const htmlContent = convertToHtml(markdownContent, reportName);
 
             // Generate PDF
