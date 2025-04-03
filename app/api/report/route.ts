@@ -18,94 +18,55 @@ export async function POST(req: Request) {
             messages: [
                 {
                     role: "system",
-                    content: `You are a technical writer specializing in carbon removal reports. Generate a professional report in markdown format and proper table syntax with the following structure:
-
-                                # [Report Title]
-                                **Generated on**: ${date} in the format of "28th January, 2025"
+                    content: `You are a masterclass expert technical writer specializing in NSRF compliant carbon removal reports. Generate a professional 3-page report in markdown format with this exact structure:
                                 
-                               ## Executive Summary
-                                [Concise  paragraph summarizing key findings]
+                                PAGE 1 (Cover & Summary)
+                                # [Report Title]
+                                **Generated on**: [Date in "28th January, 2025" format]
+                                
+                                ## Executive Summary
+                                [3-4 sentence paragraph summarizing key production metrics, carbon removal totals, and quality status. No bullet points.]
                                 
                                 ## Methodology  
-                                [Concise paragraph summarizing list of methods]
+                                [2 paragraph description of biomass collection, pyrolysis process, and quality control methods. Focus on NSRF compliance.]
                                 
+                                PAGE 2 (Production Data)
                                 ## Production Data
                                 ### Biochar Production
-                                [Table with exact format below]
+                                [Table showing: Total Produced, Approved, Rejected, Pending, Mixed, Shipped, Applied]
                                 
                                 ### Biomass Collection
-                                [Table with exact format below]
+                                [Table showing all biomass sources with quantities]
                                 
                                 ### Biochar Statistics
-                                [Table with exact format below]
+                                [Table showing: Total Packed, Total Shipped]
                                 
+                                PAGE 3 (Calculations & Verification)
                                 ## Carbon Removal Calculations
-                                [Formulas with spacing as shown]
-                                - Include formulas where applicable
-                                - Present results clearly
+                                [Professional presentation with:
+                                1. Brief introduction paragraph
+                                2. Centered equation: Total Carbon Removal = Total Produced × Carbon Factor
+                                3. Calculation steps with values substituted
+                                4. Final result emphasized]
                                 
                                 ## Quality Assurance
-                                [Verification processes as a paragraph]
-                                - Describe verification processes
-                                - Highlight any quality metrics
+                                [Paragraph describing verification processes followed by bullet points of key metrics checked]
                                 
                                 ## Appendices
-                                [Supplementary data as a paragraph]
-                                - Raw data references
-                                - Additional technical details
+                                [2-3 sentence paragraph referencing raw data sources and technical specifications]
                                 
-                                STRICT FORMATTING RULES:
-                                
-                                1. PAGE LAYOUT:
-                                - Never begin a section within 2cm of page bottom
-                                - Minimise vertical space & unnecessary line breaks
-                                - Maintain 1.5cm margins on all sides
-                                - Keep page numbers at absolute footer (1cm from bottom)
-                                - If last page has <25% content, redistribute to previous pages
-                                
-                                2. TABLES:
-                                | Metric          | Value   | Units   |
-                                |-----------------|---------|---------|
-                                | Total Produced  | 3,380   | liters  |
-                                | Approved        | 3,380   | liters  |
-                                
-                                Requirements:
-                                - One table per page maximum
-                                - Never split tables across pages
-                                - 0.5cm padding above/below tables
-                                - Center-align numerical data
-                                
-                                3. LISTS:
-                                - One list item per line
-                                - 0.3cm spacing between items
-                                - Never wrap list items
-                                
-                                4. EQUATIONS:
-                                - Centered with 0.5cm padding
-                                - 1cm spacing before/after
-                                - Explanatory text above each
-                                
-                                5. SECTION BREAKS:
-                                - Minimum 1.5cm space before headings
-                                - Never leave heading as last line on page
-                                
-                                6. DENSITY OPTIMIZATION:
-                                - Adjust line spacing to 1.15
-                                - Paragraph spacing: 0.5cm
-                                - Font sizes:
-                                  • Headers: 14pt 
-                                  • Body: 11pt
-                                  • Tables: 10pt
-                                
-                                7. SPECIAL CASES:
-                                - If table exceeds page height:
-                                  1) Split into logical subtables
-                                  2) Reduce font size to 9pt
-                                  3) Move to next page with continuation note
-            `},
+                                STRICT RULES:
+                                • Tables must use exact format: 
+                                | Metric | Value | Units |
+                                |--------|-------|-------|
+                                • Never split content across pages
+                                • Equations wrapped in \\[ \\]
+                                • Page breaks controlled via content distribution
+                                • All numbers formatted with thousands separators
+                `},
                 {
                     role: "user",
-                    content: `Generate an NSRF-compliant report titled "${reportName}" based on this data:\n\n${data}`
+                    content: `Generate an expertly written NSRF-compliant report titled "${reportName}" based on this data:\n\n${data}`
                 }
             ],
             temperature: 1.0

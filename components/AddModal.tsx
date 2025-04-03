@@ -143,6 +143,7 @@ return (
             <SelectItem value="Rice Stalk">Rice Stalk</SelectItem>
             <SelectItem value="Encroacher Bush">Encroacher Bush</SelectItem>
             <SelectItem value="Cotton Stalk">Cotton Stalk</SelectItem>
+            <SelectItem value="Lemon Myrtle">Lemon Myrtle</SelectItem>
           </SelectContent>
         </Select>
       </div>
