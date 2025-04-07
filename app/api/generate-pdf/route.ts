@@ -1,88 +1,70 @@
 import { NextResponse } from 'next/server';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium-min';
 
 export async function POST(request: Request) {
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    const timeout = setTimeout(() => {
-        controller.abort('PDF generation timed out');
-    }, 25000);
+    const abortController = new AbortController();
+    const timeout = setTimeout(() => abortController.abort(), 25000);
 
     try {
         const { htmlContent, reportName } = await request.json();
 
-        if (signal.aborted) {
-            throw new Error(signal.reason || 'Request aborted');
-        }
-
         const browser = await puppeteer.launch({
-            headless: true,
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--no-first-run',
-                '--no-zygote',
-                '--single-process',
-                '--disable-gpu'
-            ],
+            args: chromium.args,
+            executablePath: await chromium.executablePath(
+                process.env.CHROME_EXECUTABLE_PATH
+            ),
+            headless: chromium.headless,
+            defaultViewport: chromium.defaultViewport,
         });
 
-        signal.addEventListener('abort', () => {
-            browser.close().catch(console.error);
-        });
+        const cleanup = async () => {
+            clearTimeout(timeout);
+            try {
+                if (browser && browser.process() != null) {
+                    await browser.close();
+                }
+            } catch (e) {
+                console.error('Browser cleanup error:', e);
+            }
+        };
+
+        abortController.signal.addEventListener('abort', cleanup);
 
         const page = await browser.newPage();
-
-        if (signal.aborted) {
-            throw new Error(signal.reason || 'Request aborted');
-        }
+        page.setDefaultTimeout(10000);
 
         await page.setContent(htmlContent, {
-            waitUntil: 'networkidle0',
-            timeout: 20000
+            waitUntil: 'domcontentloaded',
+            timeout: 10000
         });
-
-        if (signal.aborted) {
-            throw new Error(signal.reason || 'Request aborted');
-        }
 
         const pdfBuffer = await page.pdf({
             format: 'A4',
             printBackground: true,
             margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
-            timeout: 20000
+            timeout: 10000
         });
 
-        await browser.close();
-        clearTimeout(timeout);
+        await cleanup();
 
         return new NextResponse(pdfBuffer, {
             headers: {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': `attachment; filename=${encodeURIComponent(reportName)}.pdf`,
+                'Content-Disposition': `attachment; filename=${encodeURIComponent(reportName || 'document')}.pdf`,
             },
         });
+
     } catch (error) {
-        clearTimeout(timeout);
-
-        if (error instanceof Error && error.name === 'AbortError') {
-            console.error('PDF generation aborted:', error.message);
-            return NextResponse.json(
-                { error: 'PDF generation timed out' },
-                { status: 504 }
-            );
-        }
-
         console.error('PDF generation error:', error);
         return NextResponse.json(
             {
                 error: 'Failed to generate PDF',
-                details: error instanceof Error ? error.message : String(error)
+                message: error instanceof Error ? error.message : 'Unknown error'
             },
             { status: 500 }
         );
+    } finally {
+        clearTimeout(timeout);
     }
 }
