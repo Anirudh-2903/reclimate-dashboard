@@ -12,23 +12,3 @@ export async function fetchAIChatResponse(query: string): Promise<string> {
         return "There was an error processing your request.";
     }
 }
-
-
-export async function generatePDF(htmlContent: string, reportName: string): Promise<Blob> {
-    try {
-        const response = await fetch("/api/generate-pdf", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ htmlContent, reportName }),
-        });
-
-        if (!response.ok) {
-            throw new Error('PDF generation failed');
-        }
-
-        return await response.blob();
-    } catch (error) {
-        console.error("Error generating PDF:", error);
-        throw error;
-    }
-}

@@ -9,9 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Progress } from "@/components/ui/progress";
-import {Loader2, Download, Eye} from "lucide-react";
+import {Loader2, Printer} from "lucide-react";
 import { generateReportContent } from "@/services/reportGenerator";
-import { generatePDF } from "@/services/aiResponse";
 
 interface ReportGeneratorProps {
     producedBiochar: {
@@ -100,12 +99,12 @@ export function ReportGenerator({
     );
     const [isGenerating, setIsGenerating] = useState(false);
     const [progress, setProgress] = useState(0);
-    const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+    const [htmlContent, setHtmlContent] = useState<string | null>(null);
 
     const handleGenerate = async () => {
         setIsGenerating(true);
         setProgress(0);
-        setPdfUrl(null);
+        setHtmlContent(null);
 
         try {
             // Generate report content
@@ -118,15 +117,9 @@ export function ReportGenerator({
 
             // Convert to HTML
             setProgress(60);
-            console.log(markdownContent);
-            const htmlContent = convertToHtml(markdownContent, reportName);
+            const html = convertToHtml(markdownContent, reportName);
+            setHtmlContent(html);
 
-            // Generate PDF
-            setProgress(80);
-            const pdfBlob = await generatePDF(htmlContent, reportName);
-            const url = URL.createObjectURL(pdfBlob);
-
-            setPdfUrl(url);
             setProgress(100);
             toast.success("Report generated successfully");
         } catch (error) {
@@ -137,14 +130,65 @@ export function ReportGenerator({
         }
     };
 
-    const handleDownload = () => {
-        if (pdfUrl) {
-            const a = document.createElement('a');
-            a.href = pdfUrl;
-            a.download = `${reportName}.pdf`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+    const handleViewReport = () => {
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${reportName}</title>
+                    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+                    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+                    <style>
+                        body { 
+                            font-family: Arial, sans-serif; 
+                            line-height: 1.6; 
+                            padding: 20px;
+                        }
+                        @page {
+                            size: A4;
+                            margin: 1cm;
+                        }
+                        @media print {
+                            body {
+                                padding: 0;
+                                background: white;
+                                font-size: 12pt;
+                            }
+                            table {
+                                page-break-inside: avoid;
+                            }
+                            h1, h2, h3 {
+                                page-break-after: avoid;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${htmlContent}
+                    <script>
+                        // Force MathJax to render before printing
+                        window.onload = function() {
+                            if (window.MathJax) {
+                                MathJax.typesetPromise().then(function() {
+                                    setTimeout(function() {
+                                        window.print();
+                                        window.close();
+                                    }, 500);
+                                });
+                            } else {
+                                setTimeout(function() {
+                                    window.print();
+                                    window.close();
+                                }, 1000);
+                            }
+                        };
+                    </script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
         }
     };
 
@@ -246,6 +290,25 @@ export function ReportGenerator({
           margin: 10px 0;
           padding-left: 20px;
         }
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+                font-size: 12pt;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3 {
+                page-break-after: avoid;
+            }
+        }
       </style>
     </head>
     <body>
@@ -287,23 +350,15 @@ export function ReportGenerator({
             </CardContent>
 
             <CardFooter className="flex justify-end gap-2">
-                {pdfUrl && (
+                {htmlContent && (
                     <>
                         <Button
                             variant="outline"
-                            onClick={() => window.open(pdfUrl, '_blank')}
+                            onClick={handleViewReport}
                             className="flex items-center gap-2"
                         >
-                            <Eye className="h-4 w-4" />
-                            View Report
-                        </Button>
-                        <Button
-                            variant="outline"
-                            onClick={handleDownload}
-                            className="flex items-center gap-2"
-                        >
-                            <Download className="h-4 w-4" />
-                            Download Report
+                            <Printer className="h-4 w-4" />
+                            Save Report
                         </Button>
                     </>
                 )}
